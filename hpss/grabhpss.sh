@@ -43,9 +43,10 @@ if [ ${#targetfile} -eq 0 ] ;then
    htar -tvf ${hpsspath}/${tarball}
 else
    echo 'targetfile=' $targetfile
-   for untarfile in $targetfile
-   do
-     htar -xvf ${hpsspath}/${tarball} $untarfile
-   done
+   htar -xvf ${hpsspath}/${tarball} $targetfile
+   #for untarfile in $targetfile
+   #do
+   #  htar -xvf ${hpsspath}/${tarball} $untarfile
+   #done
 fi
 

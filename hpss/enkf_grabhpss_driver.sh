@@ -28,12 +28,8 @@ if [ $rc -ne 0 ]; then
    exit
 fi
 
-if [ -d $wrkdir ]; then
-   rm -rf $wrkdir/*
-else
-   mkdir -p $wrkdir
-fi
 cd $wrkdir
+echo $pwd
 
 for mem_n in $pull_members
 do
