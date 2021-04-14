@@ -1,7 +1,12 @@
 #!/bin/ksh
 
-machine='s4'
-batchrun='Y'  
+if [ -d /glade ]; then
+   machine='cas'
+   batchrun='N'
+elif [ -d /carddata ]; then
+   machine='s4'
+   batchrun='Y'  
+fi
 
 if [ $machine == 'hera' ]; then
    nems2nc=/scratch1/BMC/gsd-fv3-dev/MAPP_2018/bhuang/JEDI-2020/JEDI-FV3/expCodes/GSDChem_cycling/global-workflow/sorc/nemsio2nc.fd_Cory/nemsioatm2nc
