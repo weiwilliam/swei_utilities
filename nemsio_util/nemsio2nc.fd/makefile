@@ -8,6 +8,8 @@ INCFLAGS=$(NETCDF_INC) -I$(NEMSIO_INC)
 objects = init_nemsioatm2nc.o vars_nemsioatm2nc.o convert_nemsioatm2nc.o mainatm.o
 sfcobjects = init_nemsiosfc2nc.o vars_nemsiosfc2nc.o convert_nemsiosfc2nc.o mainsfc.o
 
+all: nemsioatm2nc nemsiosfc2nc
+
 nemsioatm2nc: $(objects)
 	$(FC) $(FCFLAGS) -o nemsioatm2nc $(objects) $(LDFLAGS) $(INCFLAGS)
 
