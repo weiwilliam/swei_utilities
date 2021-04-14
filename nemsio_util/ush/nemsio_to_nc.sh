@@ -15,6 +15,7 @@ elif [ $machine == 's4' ]; then
    module load nemsio/2.5.2
    module load w3nco/2.4.1
    nemsatm2nc=/home/swei/bin/nemsioatm2nc
+   nemssfc2nc=/home/swei/bin/nemsiosfc2nc
    aprun=`which srun`
    accnt='star'
    wtime='00:30:00'
@@ -36,11 +37,15 @@ nst_in=$5
 
 if [ -s $nemsatm2nc -a -s $nemssfc2nc ]; then
    if [ $batchrun == 'Y' ]; then
-      if [ -s $atm_in -a ! -s $atm_out ]; then
-         $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out
+      if [ ! -z $atm_in ] ; then
+         if [ -s $atm_in -a ! -s $atm_out ]; then
+            $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out &
+         fi
       fi
-      if [ -s $sfc_in -a ! -s $sfc_out ]; then
-         $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in
+      if [ ! -z $sfc_in ]; then
+         if [ -s $sfc_in -a ! -s $sfc_out ]; then
+            $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in &
+         fi
       fi
    else
       [[ ! -s $atm_out ]] && $nemsatm2nc $atm_in $atm_out
