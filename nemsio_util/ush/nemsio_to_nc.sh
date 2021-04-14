@@ -39,8 +39,8 @@ if [ -s $nemsatm2nc -a -s $nemssfc2nc ]; then
       $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out 
       $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in
    else
-      #$nemsatm2nc $atm_in $atm_out
-      $nemssfc2nc $sfc_in $sfc_out $nst_in
+      [[ ! -s $atm_out ]] && $nemsatm2nc $atm_in $atm_out
+      [[ ! -s $sfc_out ]] && $nemssfc2nc $sfc_in $sfc_out $nst_in
    fi
 else
    echo 'nemsioatm2nc not existed!!'
