@@ -1,7 +1,7 @@
 #!/bin/ksh
 
-machine='cas'
-batchrun='N'  
+machine='s4'
+batchrun='Y'  
 
 if [ $machine == 'hera' ]; then
    nems2nc=/scratch1/BMC/gsd-fv3-dev/MAPP_2018/bhuang/JEDI-2020/JEDI-FV3/expCodes/GSDChem_cycling/global-workflow/sorc/nemsio2nc.fd_Cory/nemsioatm2nc
@@ -31,16 +31,20 @@ fi
 atm_in=$1
 atm_out=$2
 sfc_in=$3
-nst_in=$4
-sfc_out=$5
+sfc_out=$4
+nst_in=$5
 
 if [ -s $nemsatm2nc -a -s $nemssfc2nc ]; then
    if [ $batchrun == 'Y' ]; then
-      $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out 
-      $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in
+      if [ -s $atm_in -a ! -s $atm_out ]; then
+         $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out
+      fi
+      if [ -s $sfc_in -a ! -s $sfc_out ]; then
+         $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in
+      fi
    else
-      #$nemsatm2nc $atm_in $atm_out
-      $nemssfc2nc $sfc_in $sfc_out $nst_in
+      $nemsatm2nc $atm_in $atm_out
+      #$nemssfc2nc $sfc_in $sfc_out $nst_in
    fi
 else
    echo 'nemsioatm2nc not existed!!'

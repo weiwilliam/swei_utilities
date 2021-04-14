@@ -9,6 +9,15 @@ if [ $machine == 'hera' ]; then
    module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
    module load nemsio/2.2.4 bacio/2.0.3 sp/2.0.3 w3nco/2.0.7 netcdf
    module list
+elif [ $machine == 's4' ]; then
+   module purge
+   module load license_intel/S4
+   module load intel/18.0.3
+   module load emc-hpc-stack/2020-q3
+   module load netcdf/4.7.4
+   module load bacio/2.4.1
+   module load w3nco/2.4.1
+   module load nemsio/2.5.2
 elif [ $machine == 'chy' ]; then
    module purge
    module load intel
@@ -23,4 +32,8 @@ fi
 
 MAKE=`which make`
 
-$MAKE -f makefile $target
+if [ -z $target ]; then
+   $MAKE -f makefile all
+else
+   $MAKE -f makefile $target
+fi
