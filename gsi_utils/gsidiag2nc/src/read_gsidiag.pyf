@@ -1,0 +1,94 @@
+!    -*- f90 -*-
+! Note: the context of this file is case sensitive.
+
+python module read_gsidiag ! in 
+    interface  ! in :read_gsidiag
+        subroutine read_cnvhead(infile,nrecs,varlist,psnreal,tnreal,qnreal,gpsnreal,sstnreal,uvnreal,tcpnreal,psnum,tnum,qnum,gpsnum,sstnum,uvnum,tcpnum) ! in :read_gsidiag:read_gsidiag.f90
+            character*256 intent(in) :: infile
+            integer intent(out) :: nrecs
+            character dimension(7,3),intent(out,c) :: varlist
+            integer intent(out) :: psnreal
+            integer intent(out) :: tnreal
+            integer intent(out) :: qnreal
+            integer intent(out) :: gpsnreal
+            integer intent(out) :: sstnreal
+            integer intent(out) :: uvnreal
+            integer intent(out) :: tcpnreal
+            integer intent(out) :: psnum
+            integer intent(out) :: tnum
+            integer intent(out) :: qnum
+            integer intent(out) :: gpsnum
+            integer intent(out) :: sstnum
+            integer intent(out) :: uvnum
+            integer intent(out) :: tcpnum
+        end subroutine read_cnvhead
+        subroutine load_cnvdata(infile,nrecs,varlist,psnreal,tnreal,qnreal,gpsnreal,sstnreal,uvnreal,tcpnreal,psnum,tnum,qnum,gpsnum,sstnum,uvnum,tcpnum,ps_stid,ps_data,t_stid,t_data,q_stid,q_data,gps_stid,gps_data,sst_stid,sst_data,uv_stid,uv_data,tcp_stid,tcp_data) ! in :read_gsidiag:read_gsidiag.f90
+            character*256 intent(in) :: infile
+            integer intent(in) :: nrecs
+            character dimension(7,3),intent(in,c) :: varlist
+            integer intent(in) :: psnreal
+            integer intent(in) :: tnreal
+            integer intent(in) :: qnreal
+            integer intent(in) :: gpsnreal
+            integer intent(in) :: sstnreal
+            integer intent(in) :: uvnreal
+            integer intent(in) :: tcpnreal
+            integer intent(in) :: psnum
+            integer intent(in) :: tnum
+            integer intent(in) :: qnum
+            integer intent(in) :: gpsnum
+            integer intent(in) :: sstnum
+            integer intent(in) :: uvnum
+            integer intent(in) :: tcpnum
+            character dimension(psnum,8),intent(out,c),depend(psnum) :: ps_stid
+            real(kind=4) dimension(psnreal,psnum),intent(out),depend(psnreal,psnum) :: ps_data
+            character dimension(tnum,8),intent(out,c),depend(tnum) :: t_stid
+            real(kind=4) dimension(tnreal,tnum),intent(out),depend(tnreal,tnum) :: t_data
+            character dimension(qnum,8),intent(out,c),depend(qnum) :: q_stid
+            real(kind=4) dimension(qnreal,qnum),intent(out),depend(qnreal,qnum) :: q_data
+            character dimension(gpsnum,8),intent(out,c),depend(gpsnum) :: gps_stid
+            real(kind=4) dimension(gpsnreal,gpsnum),intent(out),depend(gpsnreal,gpsnum) :: gps_data
+            character dimension(sstnum,8),intent(out,c),depend(sstnum) :: sst_stid
+            real(kind=4) dimension(sstnreal,sstnum),intent(out),depend(sstnreal,sstnum) :: sst_data
+            character dimension(uvnum,8),intent(out,c),depend(uvnum) :: uv_stid
+            real(kind=4) dimension(uvnreal,uvnum),intent(out),depend(uvnreal,uvnum) :: uv_data
+            character dimension(tcpnum,8),intent(out,c),depend(tcpnum) :: tcp_stid
+            real(kind=4) dimension(tcpnreal,tcpnum),intent(out),depend(tcpnreal,tcpnum) :: tcp_data
+        end subroutine load_cnvdata
+        subroutine read_radhead(infile,nchanl1,npred1,nobs1,nreal1) ! in :read_gsidiag:read_gsidiag.f90
+            character*256 intent(in) :: infile
+            integer intent(out) :: nchanl1
+            integer intent(out) :: npred1
+            integer intent(out) :: nobs1
+            integer intent(out) :: nreal1
+        end subroutine read_radhead
+        subroutine load_raddata(infile,nchanl2,npred2,nobs2,nreal2,freq,pol,wave,varch,tlap,iuse_rad,nuchan,ich,locinfo,tb_obs,tbc,tbcnob,errinv,qcflag,emiss,tlapchn,ts,pred) ! in :read_gsidiag:read_gsidiag.f90
+            character*256 intent(in) :: infile
+            integer intent(in) :: nchanl2
+            integer intent(in) :: npred2
+            integer intent(in) :: nobs2
+            integer intent(in) :: nreal2
+            real(kind=4) dimension(nchanl2),intent(out),depend(nchanl2) :: freq
+            real(kind=4) dimension(nchanl2),intent(out),depend(nchanl2) :: pol
+            real(kind=4) dimension(nchanl2),intent(out),depend(nchanl2) :: wave
+            real(kind=4) dimension(nchanl2),intent(out),depend(nchanl2) :: varch
+            real(kind=4) dimension(nchanl2),intent(out),depend(nchanl2) :: tlap
+            integer dimension(nchanl2),intent(out),depend(nchanl2) :: iuse_rad
+            integer dimension(nchanl2),intent(out),depend(nchanl2) :: nuchan
+            integer dimension(nchanl2),intent(out),depend(nchanl2) :: ich
+            real(kind=4) dimension(nreal2,nobs2),intent(out),depend(nreal2,nobs2) :: locinfo
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: tb_obs
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: tbc
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: tbcnob
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: errinv
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: qcflag
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: emiss
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: tlapchn
+            real(kind=4) dimension(nchanl2,nobs2),intent(out),depend(nchanl2,nobs2) :: ts
+            real(kind=4) dimension(nchanl2,npred2 + 2,nobs2),intent(out),depend(nchanl2,npred2,nobs2) :: pred
+        end subroutine load_raddata
+    end interface 
+end python module read_gsidiag
+
+! This file was auto-generated with f2py (version:2).
+! See http://cens.ioc.ee/projects/f2py2e/
