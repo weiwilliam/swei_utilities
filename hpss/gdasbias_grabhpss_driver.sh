@@ -24,8 +24,8 @@ export homedir=/home/Shih-wei.Wei/utils/hpss
 export wrkdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrktmp
 export desdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
 
-sdate=2020083012
-edate=2020092118
+sdate=2020062418
+edate=2020071412
 
 checkoutdate=$sdate
 while [ $checkoutdate -le $edate ]
@@ -34,47 +34,37 @@ cd $wrkdir
 echo $pwd
 pdy=`echo $checkoutdate | cut -c1-8`
 cyc=`echo $checkoutdate | cut -c9-10`
-tarprefix=com_gfs_prod_gdas
 dump=gdas
+tarprefix=com_gfs_prod_gdas
+tarsuffix=gdas
 
-targetfiles="./gdas.$pdy/$cyc/gdas.t${cyc}z.radstat"
+fsuffix_list="abias abias_pc abias_air"
+targetfiles=""
+for fsuffix in $fsuffix_list
+do
+  targetfiles=`echo $targetfiles ./${dump}.${pdy}/${cyc}/${dump}.t${cyc}z.${fsuffix}`
+done
 echo "Pulling from HPSS:" $targetfiles
 
-sh $homedir/grabhpss.sh $checkoutdate $tarprefix $dump $targetfiles
+sh $homedir/grabhpss.sh $checkoutdate $tarprefix $tarsuffix $targetfiles
 rc=$?
 if [ $rc -ne 0 ]; then
    exit
 fi
 
-sensor_list="iasi_metop-a iasi_metop-b"
-loop_list="ges anl"
-untar_list=""
-for loop in $loop_list
-do
-  for sensor in $sensor_list
-  do
-    untar_list=`echo $untar_list diag_${sensor}_${loop}.${checkoutdate}.gz`
-  done
-done
-
 #
 if [ ! -d $desdir/${dump}.${pdy}/$cyc ]; then
    mkdir -p $desdir/${dump}.${pdy}/$cyc
 fi
-mv $wrkdir/$targetfiles $desdir/${dump}.${pdy}/$cyc
+cd $wrkdir
+mv $targetfiles $desdir/${dump}.${pdy}/$cyc
 rc=$?
-if [ $rc -eq 0 ]; then
-   cd $desdir/${dump}.${pdy}/$cyc
-   tar -xvf ${dump}.t${cyc}z.radstat $untar_list
-   untar_rc=$?
-fi
-
-if [ $untar_rc -eq 0 ]; then
-   gunzip $untar_list
-else
+if [ $rc -ne 0 ]; then
    exit 1
 fi
 
 checkoutdate=`python $ndatepy 6 $checkoutdate`
 
 done
+
+exit 0

@@ -1,5 +1,4 @@
 #!/bin/bash --login
-
 #SBATCH --job-name=movedata
 #SBATCH --account=wrf-chem
 #SBATCH --partition=service
@@ -9,8 +8,8 @@
 
 set -x
 
-SRC=/scratch1/BMC/gsd-fv3-dev/MAPP_2018/swei/comrot/FV3ICS
-DEST=/scratch2/BMC/gsd-fv3-dev/Shih-wei.Wei/mapp_2018/comrot
+SRC=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
+DEST=/scratch2/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
 
 OUT=/home/Shih-wei.Wei/wrk/logs/movedata.log
 echo “$(date) : Starting sync from $SRC to $DEST”>> $OUT

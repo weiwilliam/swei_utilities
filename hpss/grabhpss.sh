@@ -1,11 +1,7 @@
 #!/bin/ksh
-
-module purge
-module load hpss
-
 cdate=$1
 tarprefix=$2
-dump=$3
+tarsuffix=$3
 shift 3
 targetfile=$@
 echo "Pulling from HPSS:" $targetfile
@@ -17,14 +13,16 @@ mm=`echo $cdate | cut -c5-6`
 dd=`echo $cdate | cut -c7-8`
 hh=`echo $cdate | cut -c9-10`
 
-# gdas enkf 
+# GDAS enkf 
 # Spectrum: gpfs_hps_nco_ops_com_gfs_prod_enkf.20170823_00.anl.tar
 # FV3:      com_gfs_prod_enkfgdas.20210301_12.enkfgdas_restart_grp1.tar
+# GDAS diagnostic files
+# /NCEPPROD/hpssprod/runhistory/rh2020/202006/20200622/com_gfs_prod_gdas.20200622_12.gdas.tar
+# ./gdas.20200601/00/gdas.t00z.radstat
 
-tarball=${tarprefix}.${yy}${mm}${dd}_${hh}.${dump}.tar
+tarball=${tarprefix}.${yy}${mm}${dd}_${hh}.${tarsuffix}.tar
 hpsspath=/NCEPPROD/hpssprod/runhistory/rh${yy}/${yy}${mm}/${yy}${mm}${dd}
 
-#/NCEPPROD/hpssprod/runhistory/rh2020/202006/20200622/com_gfs_prod_gdas.20200622_12.gdas.tar
 
 if [ -d $wrkdir ]; then
    rm -rf $wrkdir/*
