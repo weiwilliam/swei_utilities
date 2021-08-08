@@ -15,18 +15,27 @@ elif [[ -d /carddata ]] ; then
     export JEDI_OPT=/data/users/mmiesch/modules
     module use $JEDI_OPT/modulefiles/core
     module load jedi/intel-impi
+    echo "git clone git@github.com:jcsda/jedi-cmake.git"
+    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-S4-Intel.cmake <path-to-bundle>"
 elif [[ -d /work ]]; then
     . $MODULESHOME/init/sh
     target=orion
     export JEDI_OPT=/work/noaa/da/grubin/opt/modules
     module use $JEDI_OPT/modulefiles/core
     module load jedi/intel-impi
+    echo "git clone git@github.com:jcsda/jedi-cmake.git"
+    echo "git clone https://github.com/jcsda/<jedi-bundle>"
+    echo "mkdir -p jedi/build; cd jedi/build"
+    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-Orion-Intel.cmake <path-to-bundle>"
+    echo "make -j4"
 elif [[ -d /glade ]] ; then
     . $MODULESHOME/init/sh
     target=cheyenne
     module purge
     export OPT=/glade/work/miesch/modules
     module use $OPT/modulefiles/core
+    echo "git clone git@github.com:jcsda/jedi-cmake.git"
+    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-Cheyenne-Intel.cmake <path-to-bundle>"
 fi
 echo "It's on $target"
 module list
