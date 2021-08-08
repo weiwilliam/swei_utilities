@@ -17,6 +17,8 @@ elif [[ -d /carddata ]] ; then
     module load jedi/intel-impi
     echo "git clone git@github.com:jcsda/jedi-cmake.git"
     echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-S4-Intel.cmake <path-to-bundle>"
+    echo "ecbuild -DMPIEXEC_EXECUTABLE=/usr/bin/srun -DMPIEXEC_NUMPROC_FLAG=\"-n\" <path-to-bundle>"
+    echo "make -j4"
 elif [[ -d /work ]]; then
     . $MODULESHOME/init/sh
     target=orion
