@@ -7,19 +7,29 @@ Created on Thu Mar 21 21:59:35 2019
 """
 import os
 import sys
-sys.path.append('/data/users/swei/resultcheck/R2O_work/DiagFiles/GSI_DiagPackage/PythonScripts/libs')
-import read_gsidiag as rd
 import numpy as np
 import time
 from datetime import datetime
 from datetime import timedelta
 import xarray as xa
 import pandas as pd
+if 's4' in os.getenv('machine'):
+   machine_name='s4'
+   sys.path.append('/data/users/swei/resultcheck/R2O_work/DiagFiles/GSI_DiagPackage/PythonScripts/libs')
+elif 'hera' in os.getenv('machine'):
+   machine_name='hera'
+   sys.path.append('/home/Shih-wei.Wei/utils/gsi_utils/gsidiag2nc/src')
+import read_gsidiag as rd
 
-path='/data/users/swei/archive/DiagFiles'
-#path='/data/users/swei/resultcheck/R2O_work/DiagFiles/input_diag'
-txtpath='/data/users/swei/resultcheck/R2O_work/DiagFiles/GSI_DiagPackage/output'
-outpath='/data/users/swei/archive/nc_DiagFiles'
+if machine_name == 's4':
+   path='/data/users/swei/archive/DiagFiles'
+   #path='/data/users/swei/resultcheck/R2O_work/DiagFiles/input_diag'
+   txtpath='/data/users/swei/resultcheck/R2O_work/DiagFiles/GSI_DiagPackage/output'
+   outpath='/data/users/swei/archive/nc_DiagFiles'
+elif machine_name == 'hera':
+   path='/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/common'
+   #txtpath='/data/users/swei/resultcheck/R2O_work/DiagFiles/GSI_DiagPackage/output'
+   outpath='/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/AeroObsStats/nc_diag'
 
 ''' ! radiance bias correction terms are as follows:
 !  pred(1,:)  = global offset
@@ -35,8 +45,7 @@ outpath='/data/users/swei/archive/nc_DiagFiles'
 !  pred(11,:) = second order polynomial of angle bias correction
 !  pred(12,:) = first order polynomial of angle bias correction  '''
 
-#explist=['test']
-explist=['prctrl']
+explist=['GDAS']
 #sensorlist=['hirs2_n14','msu_n14','sndr_g08','sndr_g11','sndr_g12','sndr_g13',
 #            'sndr_g08_prep','sndr_g11_prep','sndr_g12_prep','sndr_g13_prep',
 #            'sndrd1_g11','sndrd2_g11','sndrd3_g11','sndrd4_g11','sndrd1_g12',
@@ -63,8 +72,8 @@ explist=['prctrl']
 sensorlist=['iasi_metop-a']
 looplist=['ges']#,'anl'] #ges,anl
 
-sdate=2017080512
-edate=2017080512
+sdate=2020082200 
+edate=2020092118
 
 def ndate(cdate,hinc):
     yy=int(str(cdate)[:4])
@@ -99,11 +108,21 @@ for exp in explist:
     for sensor in sensorlist:
         d=0
         for date in dlist:
+            pdy=date[:8]
+            cyc=date[-2:]
+            if (exp=='GDAS'):
+               archdir=path+'/'+exp+'/gdas.'+pdy+'/'+cyc
+               savedir=outpath+'/gdas.'+pdy+'/'+cyc
+            else:
+               archdir=path+'/'+exp
+               savedir=outpath+'/'+exp
+            if ( not os.path.exists(savedir) ):
+               os.makedirs(savedir)
+
             for loop in looplist:
                 raddfile='diag_'+sensor+'_'+loop+'.'+date
                 print('Processing Radfile: %s for %s' %(raddfile,exp))
-                infile1=path+'/'+exp+'/'+raddfile
-                #infile1=path+'/'+date+'/'+exp+'/'+raddfile
+                infile1=archdir+'/'+raddfile
                 if ( not os.path.exists(infile1)):
                    print('Warning: %s is not available'%(infile1))
                    continue
@@ -166,7 +185,7 @@ for exp in explist:
                                         'npred':np.arange(npred1+2),
                                         'analysis_time':pddates[d]},
                                 attrs={'Sensor':sensor,'Reference Time':date,'Loop':loop})
-                #ds.to_netcdf(outpath+'/'+exp+'/'+raddfile+'.nc')
-                ds.to_netcdf('./'+raddfile+'.nc')
+                ds.to_netcdf(savedir+'/'+raddfile+'.nc')
+                #ds.to_netcdf('./'+raddfile+'.nc')
             d=d+1
             
