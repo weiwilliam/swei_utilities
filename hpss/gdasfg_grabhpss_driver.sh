@@ -3,7 +3,7 @@
 #SBATCH --job-name=swei_grabradstat
 #SBATCH --qos=batch
 #SBATCH --time=1:00:00
-#SBATCH --nodes=1
+#SBATCH --ntasks=1
 #SBATCH --partition=service
 #SBATCH --account=gsd-fv3-dev
 # gdas enkf 
@@ -24,8 +24,8 @@ export homedir=/home/Shih-wei.Wei/utils/hpss
 export wrkdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrktmp
 export desdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
 
-sdate=2020071412
-edate=2020071412
+sdate=2020071418
+edate=2020071418
 
 checkoutdate=$sdate
 while [ $checkoutdate -le $edate ]
