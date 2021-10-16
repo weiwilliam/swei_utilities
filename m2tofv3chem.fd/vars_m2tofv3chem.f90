@@ -6,7 +6,7 @@ module vars_m2tofv3chem
   public :: m2ptop
   public :: fv3levb
   
-  character(len=256) :: infile, outfile
+  character(len=500) :: infile, outfile
   integer, parameter :: fv3levb=64
   real :: ak(fv3levb+1), bk(fv3levb+1)
   data ak /20.00000, 64.24700, 137.7900, 221.9580, 318.2660,&
