@@ -1,9 +1,9 @@
 #!/bin/ksh
-#SBATCH --output=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrklog/grab_radstat.out
-#SBATCH --job-name=swei_grabradstat
+#SBATCH --output=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrklog/grab_radbias.out
+#SBATCH --job-name=swei_grabradbias
 #SBATCH --qos=batch
-#SBATCH --time=1:00:00
-#SBATCH --nodes=1
+#SBATCH --time=24:00:00
+#SBATCH --ntasks=1
 #SBATCH --partition=service
 #SBATCH --account=gsd-fv3-dev
 # gdas enkf 
@@ -21,11 +21,13 @@ module list
 ndatepy=${HOME}/bin/ndate.py
 
 export homedir=/home/Shih-wei.Wei/utils/hpss
-export wrkdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrktmp
-export desdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
+export wrkdir=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrktmp/grab_gdasbias
+export desdir=/scratch2/BMC/gsd-fv3-dev/Shih-wei.Wei/common/GDAS
 
-sdate=2020062418
-edate=2020071412
+[[ ! -d $wrkdir ]]&&mkdir -p $wrkdir
+
+sdate=2020092100
+edate=2020092118
 
 checkoutdate=$sdate
 while [ $checkoutdate -le $edate ]
