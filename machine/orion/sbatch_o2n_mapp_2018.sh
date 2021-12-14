@@ -23,14 +23,18 @@ else
     echo "Proceed with Orion to Niagara transfer"
 fi
 
-backupdir=/work/noaa/gsd-fv3-dev/swei/ccpp-chem/dr-data-backup
+#expname=ccpp-chem.noda-ctl
+#backupdir=/work/noaa/gsd-fv3-dev/swei/$expname/dr-data_noda-ctl-backup
+
+expname=ccpp-chem
+backupdir=/work/noaa/gsd-fv3-dev/swei/$expname/dr-data-backup
 
 orionEP=84bad22e-cb80-11ea-9a44-0255d23c44ef
 orionDir=${backupdir}
 orionLogDir=/work/noaa/gsd-fv3-dev/swei/logs/o2nlogs
 
 niagEP=21467dd0-afd6-11ea-8f12-0a21f750d19b
-niagDir=/collab1/data/Shih-wei.Wei/mapp_2018/
+niagDir=/collab1/data/Shih-wei.Wei/mapp_2018/$expname
 
 . /etc/profile
 
