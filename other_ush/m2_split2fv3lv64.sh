@@ -51,8 +51,8 @@ elif [ $machine == 's4' ]; then
    outdir=/data/users/swei/common/MERRA2_L64
 fi
 
-sdate=2020090100
-edate=2020092118
+sdate=2020082100
+edate=2020082118
 
 cdate=$sdate
 while [ $cdate -le $edate ];
@@ -64,8 +64,8 @@ do
   if [ ! -d $outdir/$y4/$mm ]; then
      mkdir -p $outdir/$y4/$mm
   fi
-  infile=$indir/$y4/$mm/MERRA2_401.inst3_3d_aer_Nv.${pdy}.nc4
-  #infile=$indir/$y4/$mm/MERRA2_400.inst3_3d_aer_Nv.${pdy}.nc4
+  #infile=$indir/$y4/$mm/MERRA2_401.inst3_3d_aer_Nv.${pdy}.nc4
+  infile=$indir/$y4/$mm/MERRA2_400.inst3_3d_aer_Nv.${pdy}.nc4
   echo "INPUT: $infile"
   tdate=$cdate
   #for t in 0 2 4 6 # MERRA2 AOD file is 3-hourly
