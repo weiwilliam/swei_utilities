@@ -51,8 +51,8 @@ elif [ $machine == 's4' ]; then
    outdir=/data/users/swei/common/MERRA2_L64
 fi
 
-sdate=2020082100
-edate=2020082118
+sdate=2020081300
+edate=2020082018
 
 cdate=$sdate
 while [ $cdate -le $edate ];
