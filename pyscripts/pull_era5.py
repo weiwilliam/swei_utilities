@@ -26,11 +26,13 @@ sys.path.append(rootgit+'/pyscripts/functions')
 from utils import ndate
 import cdsapi
 
-if (machine=='S4'):
-   downloadpath='/data/users/swei/common/ERA5'
+if (os_name=='Linux' and machine=='S4'):
+    downloadpath='/data/users/swei/common/ERA5'
+elif (os_name=='Windows'):
+    downloadpath=rootarch+'/common/ERA5'
 
-sdate=2020062100
-edate=2020071418
+sdate=2020062106
+edate=2020062118
 hint=6
 
 dlist=[]
@@ -39,9 +41,8 @@ while (cdate<=edate):
     dlist.append(str(cdate))
     cdate=ndate(hint,cdate)
 
-c = cdsapi.Client()
-
 for date in dlist:
+    c = cdsapi.Client()
     yy=date[:4];  mm=date[4:6]
     dd=date[6:8]; hh=date[8:10]
     filename='era5_'+date+'.grib'
