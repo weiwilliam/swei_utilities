@@ -17,7 +17,8 @@ elif (os_name=='Linux'):
         rootarch='/scratch2/BMC/gsd-fv3-dev/Shih-wei.Wei/ResearchData'
         rootgit='/glade/u/home/swei/research'
         machine='Cheyenne'
-    elif (os.path.exists('/s4home')):
+    elif (os.path.exists('/s4home') or
+          os.path.exists('/cardinal') ):
         rootpath='/data/users/swei/Images'
         rootarch='/scratch2/BMC/gsd-fv3-dev/Shih-wei.Wei/ResearchData'
         rootgit='/home/swei/research'

@@ -1,7 +1,7 @@
 #!/bin/ksh
 
 ndate=/home/swei/bin/ndate.py
-fcstonly_expname='aero_fcst'
+fcstonly_expname='hazyda_aero_fcst'
 archive_expname='hazyda_aero'
 CDUMP='gfs'
 ARCDUMP='gdas'
@@ -11,7 +11,7 @@ ROTDIR=/scratch/users/swei/comrot/${fcstonly_expname}
 ARCDIR=/data/users/swei/archive/${archive_expname}
 
 SDATE=2020061000
-EDATE=2020062000
+EDATE=2020071000
 H_INT=24
 
 CDATE=$SDATE

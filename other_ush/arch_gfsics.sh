@@ -8,7 +8,7 @@ comdir='/scratch/users/swei/comrot'
 archdir='/data/users/swei/archive'
 missinglog=$archdir/$expname/missing_log
 
-sdate=2020091400
+sdate=2020090100
 edate=2020092118
 
 cdate=$sdate
