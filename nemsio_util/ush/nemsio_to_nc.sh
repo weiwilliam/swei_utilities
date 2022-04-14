@@ -12,7 +12,7 @@ if [ $machine == 'hera' ]; then
    nems2nc=/scratch1/BMC/gsd-fv3-dev/MAPP_2018/bhuang/JEDI-2020/JEDI-FV3/expCodes/GSDChem_cycling/global-workflow/sorc/nemsio2nc.fd_Cory/nemsioatm2nc
 elif [ $machine == 's4' ]; then
    module load license_intel/S4
-   module load intel/18.0.3
+   module load intel/18.0.4
    module load emc-hpc-stack/2020-q3
    module load hdf5/1.10.6
    module load netcdf/4.7.4

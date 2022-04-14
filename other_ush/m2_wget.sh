@@ -10,8 +10,8 @@ file_tag='inst3_3d_aer_Nv'
 
 desdir=/data/users/swei/common/MERRA2
 
-sdate=2020061000
-edate=2020062100
+sdate=2020081300
+edate=2020082000
 
 cdate=$sdate
 while [ $cdate -le $edate ];
