@@ -6,10 +6,27 @@ if [ -d /glade ]; then
 elif [ -d /carddata ]; then
    machine='s4'
    batchrun='Y'  
+elif [ -d /scratch1 ]; then
+   machine='hera'
+   batchrun='Y'  
 fi
 
 if [ $machine == 'hera' ]; then
-   nems2nc=/scratch1/BMC/gsd-fv3-dev/MAPP_2018/bhuang/JEDI-2020/JEDI-FV3/expCodes/GSDChem_cycling/global-workflow/sorc/nemsio2nc.fd_Cory/nemsioatm2nc
+   module purge
+   module load intel/2022.1.2
+   module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
+   module load nemsio/2.2.4 bacio/2.0.3 sp/2.0.3 w3nco/2.0.7 netcdf_parallel/4.7.5
+   module load prod_util/1.1.0
+   module list
+   nemsio2nc_util=/home/Shih-wei.Wei/utils/nemsio_util/nemsio2nc.fd
+   nemsatm2nc=${nemsio2nc_util}/nemsioatm2nc
+   nemssfc2nc=${nemsio2nc_util}/nemsiosfc2nc
+   aprun=`which srun`
+   accnt='gsd-fv3-dev'
+   wtime='01:00:00'
+   qos='batch'
+   part='serial'
+   outfile=/scratch1/BMC/gsd-fv3-dev/Shih-wei.Wei/wrklog/gefs_nems2nc.log
 elif [ $machine == 's4' ]; then
    module load license_intel/S4
    module load intel/18.0.4
@@ -40,22 +57,29 @@ sfc_in=$3
 sfc_out=$4
 nst_in=$5
 
-if [ -s $nemsatm2nc -a -s $nemssfc2nc ]; then
+if [ -s $nemsatm2nc ]; then
    if [ $batchrun == 'Y' ]; then
       if [ ! -z $atm_in ] ; then
          if [ -s $atm_in -a ! -s $atm_out ]; then
             $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemsatm2nc $atm_in $atm_out &
          fi
       fi
+   else
+      [[ ! -s $atm_out ]] && $nemsatm2nc $atm_in $atm_out
+   fi
+else
+   echo 'nemsioatm2nc not existed!!'
+fi
+if [ -s $nemssfc2nc ]; then
+   if [ $batchrun == 'Y' ]; then
       if [ ! -z $sfc_in ]; then
          if [ -s $sfc_in -a ! -s $sfc_out ]; then
             $aprun -n 1 -A $accnt -t $wtime -o $outfile $nemssfc2nc $sfc_in $sfc_out $nst_in &
          fi
       fi
    else
-      [[ ! -s $atm_out ]] && $nemsatm2nc $atm_in $atm_out
       [[ ! -s $sfc_out ]] && $nemssfc2nc $sfc_in $sfc_out $nst_in
    fi
 else
-   echo 'nemsioatm2nc not existed!!'
+   echo 'nemsiosfc2nc not existed!!'
 fi
