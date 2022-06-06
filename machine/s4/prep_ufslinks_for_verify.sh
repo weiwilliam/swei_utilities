@@ -1,4 +1,5 @@
 #!/bin/ksh
+set -x
 
 NLN="/bin/ln -sf"
 ndate=/home/swei/bin/ndate.py
@@ -7,14 +8,14 @@ subfix='ufs.mfu6'
 fcstCDUMP='gfs'
 fileprefix='GFSPRS'
 
-fcstARCDIR=/data/users/swei/archive/${archive_expname}
+fcstARCDIR=/data/users/swei/ResearchData/SMOKE/${archive_expname}
 scraARCDIR=/scratch/users/swei/archive/${archive_expname}
 if [ ! -d $scraARCDIR ]; then
    mkdir -p $scraARCDIR
 fi
 
 SDATE=2020082200
-EDATE=2020082200
+EDATE=2020091800
 H_INT=24
 FHMAX=168
 FHINC=6
@@ -36,8 +37,8 @@ do
           o_fhrstr=$(printf %03i $fhr)
        fi
        fhrstr=$(printf %03i $fhr)
-       $NLN $f_datedir/${fileprefix}.${fhrstr} $scraARCDIR/pgbf${o_fhrstr}.${fcstCDUMP}.${CDATE}.grib2
-       #$NLN $f_datedir/*grib2 $fcstARCDIR
+       $NLN $f_datedir/pgbf${fhrstr}.${fcstCDUMP}.${CDATE}.grib2 $scraARCDIR/pgbf${o_fhrstr}.${fcstCDUMP}.${CDATE}.grib2
+       #$NLN $f_datedir/*grib2 $scraARCDIR
      done
   fi
 

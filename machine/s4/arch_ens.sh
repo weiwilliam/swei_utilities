@@ -3,13 +3,13 @@
 machine='s4'
 ndatepy='/home/swei/bin/ndate.py'
 
-expname='hazyda_aero'
+expname='hazyda_aero_sea'
 comdir='/scratch/users/swei/comrot'
 archdir='/data/users/swei/archive'
 num_mem=50
 
-sdate=2020090100
-edate=2020092118
+sdate=2020060100
+edate=2020071018
 
 cdate=$sdate
 while [[ $cdate -le $edate ]];
