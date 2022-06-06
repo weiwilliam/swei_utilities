@@ -3,7 +3,7 @@ module convert_nemsioatm2nc
   use nemsio_module
   implicit none
 
-  integer, parameter :: n_atm3 = 14
+  integer, parameter :: n_atm3 = 34
   integer, parameter :: n_atm2 = 2 
   character(len=10) :: atm_nc3(n_atm3)
   character(len=10) :: atm_nc2(n_atm2)
@@ -16,12 +16,22 @@ module convert_nemsioatm2nc
   data atm_nc3 / 'cld_amt   ', 'clwmr     ', 'delz      ', 'dpres     ',&
                  'dzdt      ', 'grle      ', 'icmr      ', 'o3mr      ',&
                  'rwmr      ', 'snmr      ', 'spfh      ', 'tmp       ',&
-                 'ugrd      ', 'vgrd      '/ 
+                 'ugrd      ', 'vgrd      ',&
+                 'seas1     ', 'seas2     ', 'seas3     ', 'seas4     ',&
+                 'seas5     ', 'dust1     ', 'dust2     ', 'dust3     ',&
+                 'dust4     ', 'dust5     ', 'oc1       ', 'oc2       ',&
+                 'bc1       ', 'bc2       ', 'msa       ', 'DMS       ',&
+                 'sulf      ', 'so2       ', 'pp10      ', 'pp25      '/ 
   data atm_nc2 / 'hgtsfc    ', 'pressfc   ' / 
   data atm_nems3 / 'cld_amt   ', 'clwmr     ', 'delz      ', 'dpres     ',&
                    'dzdt      ', 'grle      ', 'icmr      ', 'o3mr      ',&
                    'rwmr      ', 'snmr      ', 'spfh      ', 'tmp       ',&
-                   'ugrd      ', 'vgrd      '/ 
+                   'ugrd      ', 'vgrd      ',& 
+                   'seas1     ', 'seas2     ', 'seas3     ', 'seas4     ',&
+                   'seas5     ', 'dust1     ', 'dust2     ', 'dust3     ',&
+                   'dust4     ', 'dust5     ', 'oc1       ', 'oc2       ',&
+                   'bc1       ', 'bc2       ', 'msa       ', 'DMS       ',&
+                   'sulf      ', 'so2       ', 'pp10      ', 'pp25      '/ 
   data atm_nems2 / 'hgt       ', 'pres      ' / 
   
   
@@ -38,13 +48,40 @@ module convert_nemsioatm2nc
                    'specific humidity                      ',&
                    'temperature                            ',&
                    'zonal wind                             ',&
-                   'meridional wind                        ' /
+                   'meridional wind                        ',&
+                   'sea salt bin 1                         ',&
+                   'sea salt bin 2                         ',&
+                   'sea salt bin 3                         ',&
+                   'sea salt bin 4                         ',&
+                   'sea salt bin 5                         ',&
+                   'dust bin 1                             ',&
+                   'dust bin 2                             ',&
+                   'dust bin 3                             ',&
+                   'dust bin 4                             ',&
+                   'dust bin 5                             ',&
+                   'organic carbon 1                       ',&
+                   'organic carbon 2                       ',&
+                   'black carbon 1                         ',&
+                   'black carbon 2                         ',&
+                   'methanesulphonic acid                  ',&
+                   'dimethylsulphide                       ',&
+                   'sulphate aerosol                       ',&
+                   'sulphur dioxide                        ',&
+                   'particular matter 10                   ',&
+                   'particular matter 2.5                  '/
+
   data atm_long2 / 'surface geopotential height            ',&
                    'surface pressure                       ' /
+
   data atm_unit3 / '1         ', 'kg/kg     ', 'm         ', 'pa        ',&
                    'm/sec     ', 'kg/kg     ', 'kg/kg     ', 'kg/kg     ',&
                    'kg/kg     ', 'kg/kg     ', 'kg/kg     ', 'K         ',&
-                   'm/sec     ', 'm/sec     '/ 
+                   'm/sec     ', 'm/sec     ', &
+                   'kg/kg     ', 'kg/kg     ', 'kg/kg     ', 'kg/kg     ',&
+                   'kg/kg     ', 'kg/kg     ', 'kg/kg     ', 'kg/kg     ',&
+                   'kg/kg     ', 'kg/kg     ', 'kg/kg     ', 'kg/kg     ',&
+                   'kg/kg     ', 'kg/kg     ', 'kg/kg     ', 'kg/kg     ',&
+                   'kg/kg     ', 'kg/kg     ', 'ug/m^3    ', 'ug/m^3    '/ 
   data atm_unit2 / 'gpm       ', 'pa        ' / 
                  
 

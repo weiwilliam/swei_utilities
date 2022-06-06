@@ -5,9 +5,9 @@ target=$2
 
 if [ $machine == 'hera' ]; then
    module purge
-   module load intel/18.0.5.274
+   module load intel/2022.1.2
    module use /scratch2/NCEPDEV/nwprod/NCEPLIBS/modulefiles
-   module load nemsio/2.2.4 bacio/2.0.3 sp/2.0.3 w3nco/2.0.7 netcdf
+   module load nemsio/2.2.4 bacio/2.0.3 sp/2.0.3 w3nco/2.0.7 netcdf_parallel/4.7.5
    module list
 elif [ $machine == 's4' ]; then
    module purge
