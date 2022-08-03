@@ -3,12 +3,12 @@
 machine='s4'
 ndatepy='/home/swei/bin/ndate.py'
 
-expname='hazyda_aero_sea'
+expname='hazyda_ctrl'
 comdir='/scratch/users/swei/comrot'
 archdir='/data/users/swei/archive'
-num_mem=50
+num_mem=60
 
-sdate=2020060100
+sdate=2020070100
 edate=2020071018
 
 cdate=$sdate

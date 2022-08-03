@@ -9,7 +9,7 @@ archive_expname="${analarch_expname}_fcst"
 fcstCDUMP='gfs'
 analCDUMP='gdas'
 
-linkanal=0
+linkanal=1
 analARCDIR=/data/users/swei/archive/${analarch_expname}
 fcstARCDIR=/data/users/swei/archive/${archive_expname}
 scraARCDIR=/scratch/users/swei/archive/${archive_expname}

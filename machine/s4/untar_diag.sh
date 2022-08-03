@@ -1,6 +1,6 @@
 #!/bin/ksh
 ndate=/home/swei/bin/ndate.py
-archive_expname='hazyda_aero'
+archive_expname='hazyda_ctrl'
 CDUMP='gdas'
 
 ARCDIR=/data/users/swei/archive/${archive_expname}
@@ -16,8 +16,8 @@ else
    rm $WRKDIR/*
 fi
 
-SDATE=2020060112
-EDATE=2020060112
+SDATE=2020060106
+EDATE=2020071018
 
 CDATE=$SDATE
 while [ $CDATE -le $EDATE ]

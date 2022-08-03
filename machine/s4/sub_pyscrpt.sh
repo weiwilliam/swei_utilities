@@ -18,11 +18,18 @@ conda activate swei
 
 export HDF5_USE_FILE_LOCKING='FALSE'
 
-pyscrpts_list="plot_ncens_rmse_spread.py" #create_ncens_rmse_spread.py"
+#pyscript_home=/home/swei/research/pyscripts
+#pyscrpts_list="plot_ncens_rmse_spread.py" #create_ncens_rmse_spread.py"
+pyscript_home=/home/swei/research/pyscripts/HazyDA
+#pyscrpts_list="nccnv_biasrms.py" 
 #pyscrpts_list="nccnv_gridded_omb.py"
-#pyscrpts_list="ncrad_gridded_qcflags.py ncrad_gridded_omb.py ncrad_gridded_btd.py ncrad_gridded_bias.py"
-pyscript_home=/home/swei/research/pyscripts
-#pyscript_home=/home/swei/research/pyscripts/HazyDA
+#pyscrpts_list="exps_against_era5.py" 
+#pyscrpts_list="ncrad_2exp_usage.py"
+#pyscrpts_list="2exps_cmp_preslv_2dmap.py"
+#pyscrpts_list="2exps_cmp_surface_2dmap.py 2exps_cmp_preslv_2dmap.py"
+#pyscrpts_list="ncrad_gridded_bias.py"
+pyscrpts_list="ncrad_gridded_varinv.py" #ncrad_gridded_qcflags.py ncrad_gridded_omb.py ncrad_gridded_btd.py"
+#pyscrpts_list="ncrad_OMB_cmp.py"
 
 for pys in $pyscrpts_list
 do
@@ -31,25 +38,3 @@ do
   python $pyscript
   echo "$(date) End: $pyscript"
 done
-
-#exps_verify_tsprofs.py
-#exps_verify_2dmap.py
-#2exps_cmp_preslv_2dmap.py
-#2exps_cmp_surface_2dmap.py
-#ncrad_OMB_boxplot.py
-#ncrad_gridded_bias.py
-#ncrad_gridded_omb.py
-#ncrad_gridded_btd.py
-#ncrad_gridded_qcflags.py
-#ncrad_gridded_aercnts.py
-#ncrad_newQC_OMBPDF.py
-#ncrad_newQC_hist_pd.py
-#ncrad_1ch_bcterm.py
-#ncrad_1ch_innov.py
-#ncrad_NormOMB_cmp.py
-#ncrad_NormOMB.py
-#ncrad_OMB_hist.py
-#ncrad_OMB_cmp.py
-#ncrad_newQC_stats.py
-#pyscript=/home/swei/research/pyscripts/m2_aer_massden_2dmap.py
-#pyscript=/home/swei/research/pyscripts/create_ncens_rmse_spread.py
