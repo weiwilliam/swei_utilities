@@ -1,8 +1,8 @@
 #!/usr/bin/bash
 #SBATCH --job-name=swei_jedi_ctest
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=1
-#SBATCH --time=0:20:00
+#SBATCH --cpus-per-task=16
+#SBATCH --time=1:00:00
 #SBATCH --output=/data/users/swei/runlogs/jedi_ctest.%j.log
 ##SBATCH --mail-user=<email-address>
 
@@ -18,10 +18,10 @@ ulimit -s unlimited
 export SLURM_EXPORT_ENV=ALL
 export HDF5_USE_FILE_LOCKING=FALSE
 
-builds_dir=/data/users/swei/Builds/jedi_ioda
+builds_dir=/data/users/swei/Builds/jedi_ufo
 
 cd $builds_dir
-ctest -E get_ --rerun-failed --output-on-failure
-#ctest -E get_
+#ctest -E get_ --rerun-failed --output-on-failure
+ctest -E get_
 
 exit 0
