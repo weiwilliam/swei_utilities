@@ -87,8 +87,8 @@ then
 	    
 	    if [[ $rcc -eq 0 ]];then
 		echo "Niagara backup of $file was done successfully!!!!!!"
-		#echo "/bin/rm $file"
-		#/bin/rm $file
+		echo "/bin/rm $file"
+		/bin/rm $file
 	    else
 		echo "Niagara backup of $file failed at "`date`
 	    fi
