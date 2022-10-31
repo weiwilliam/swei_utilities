@@ -1,9 +1,10 @@
 #!/bin/ksh
 
-verify_outpath=/scratch/users/swei/verif_global_pcp_step2/tmpnwdev/verif_global.49093
-verify_type_list="precip_step2"
+verify_outpath=/scratch/users/swei/verif_ufs_g2o_step2/tmpnwdev/verif_global.421195
+verify_type_list="grid2obs_step2"
 #verify_type_list="grid2grid_step2 grid2obs_step2 precip_step2"
-tarball_savedir=/data/users/swei/archive/metplus_data
+tarball_savedir=/data/users/swei/archive/smoke_study/metplus_data
+suffix="Sep17"
 
 for vtype in $verify_type_list
 do
@@ -27,7 +28,7 @@ do
      cd $image_savedir
      find ./ -type l -name "*.png" -print > $tarball_savedir/tmplist
      echo `wc -l $tarball_savedir/tmplist`
-     tar -chf $tarball_savedir/verify_${tag}.tar -T $tarball_savedir/tmplist
+     tar -chf $tarball_savedir/verify_${tag}${suffix}.tar -T $tarball_savedir/tmplist
   else
      echo "$vtype is not available"
   fi

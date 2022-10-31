@@ -3,12 +3,12 @@
 machine='s4'
 ndatepy='/home/swei/bin/ndate.py'
 
-expname='hazyda_ctrl'
+expname='hazyda_aerov6'
 comdir='/scratch/users/swei/comrot'
 archdir='/data/users/swei/archive'
 missinglog=$archdir/$expname/missing_log
 
-sdate=2020070100
+sdate=2020060100
 edate=2020071018
 
 cdate=$sdate

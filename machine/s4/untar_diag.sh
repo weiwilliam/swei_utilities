@@ -6,7 +6,8 @@ CDUMP='gdas'
 ARCDIR=/data/users/swei/archive/${archive_expname}
 TMPDIR=/scratch/users/swei/ncdiag
 WRKDIR=$TMPDIR/wrk
-DESDIR=$TMPDIR/$archive_expname
+DESDIR=/data/users/swei/archive/nc_DiagFiles/$archive_expname
+#DESDIR=$TMPDIR/$archive_expname
 
 untar_sensor='iasi'
 

@@ -1,8 +1,8 @@
 #!/bin/ksh
 
 ndate=/home/swei/bin/ndate.py
-fcstonly_expname='hazyda_ctrl_fcst'
-archive_expname='hazyda_ctrl'
+fcstonly_expname='hazyda_aerov6_fcst'
+archive_expname='hazyda_aerov6'
 CDUMP='gfs'
 ARCDUMP='gdas'
 rDUMP=$ARCDUMP

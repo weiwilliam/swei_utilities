@@ -8,7 +8,7 @@
 ##SBATCH --exclusive
 #SBATCH --partition=serial
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=72000
+#SBATCH --mem-per-cpu=94000
 #SBATCH --output=/data/users/swei/runlogs/sub_py_log.%j
 
 source /etc/profile
@@ -23,13 +23,20 @@ export HDF5_USE_FILE_LOCKING='FALSE'
 pyscript_home=/home/swei/research/pyscripts/HazyDA
 #pyscrpts_list="nccnv_biasrms.py" 
 #pyscrpts_list="nccnv_gridded_omb.py"
-#pyscrpts_list="exps_against_era5.py" 
+pyscrpts_list="exps_against_era5.py" 
 #pyscrpts_list="ncrad_2exp_usage.py"
 #pyscrpts_list="2exps_cmp_preslv_2dmap.py"
 #pyscrpts_list="2exps_cmp_surface_2dmap.py 2exps_cmp_preslv_2dmap.py"
 #pyscrpts_list="ncrad_gridded_bias.py"
-pyscrpts_list="ncrad_gridded_varinv.py" #ncrad_gridded_qcflags.py ncrad_gridded_omb.py ncrad_gridded_btd.py"
+#pyscrpts_list="ncrad_gridded_varinv.py" #ncrad_gridded_qcflags.py ncrad_gridded_omb.py ncrad_gridded_btd.py"
 #pyscrpts_list="ncrad_OMB_cmp.py"
+#pyscrpts_list='ncrad_aereff_hist2d.py'
+#pyscrpts_list='ncrad_newQC_hist_pd.py'
+#pyscrpts_list='ncrad_newQC_OMBPDF.py'
+#pyscrpts_list='ncrad_aereff_lines.py'
+#pyscrpts_list='ncrad_spec_innov.py'
+#pyscrpts_list='ncrad_spec_bias.py'
+#pyscrpts_list='ncrad_newQC_stats.py'
 
 for pys in $pyscrpts_list
 do
