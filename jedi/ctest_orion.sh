@@ -1,33 +1,48 @@
 #!/usr/bin/bash
-#SBATCH --job-name=swei_ctest_jedi
-#SBATCH --ntasks=12
-#SBATCH --cpus-per-task=1
-#SBATCH --account=gsd-fv3-dev
+#SBATCH --job-name=swei_jedi
+#SBATCH --nodes=1
+##SBATCH --ntasks=12
+##SBATCH --cpus-per-task=1
+#SBATCH --account=jcsda
 #SBATCH --partition=orion
 #SBATCH --qos=batch
-#SBATCH --time=1:30:00
-#SBATCH --output=/work2/noaa/gsd-fv3-dev/swei/slurmlogs/ctest.%j
+#SBATCH --time=2:30:00
+#SBATCH --output=/work2/noaa/jcsda/swei/slurmlogs/jedi_build.%j
+
+set -x
 
 source /etc/bashrc
-module purge
-module use /work/noaa/da/jedipara/spack-stack/modulefiles
-module load miniconda/3.9.7
-module use /work/noaa/da/role-da/spack-stack/spack-stack-v1/envs/skylab-1.0.0-intel-2022.0.2/install/modulefiles/Core
-module load stack-intel/2022.0.2
-module load stack-intel-oneapi-mpi/2021.5.1
-module load stack-python/3.9.7
-module load jedi-fv3-env/1.0.0
-module load jedi-ewok-env/1.0.0
-module load nco/5.0.6
+source /home/swei/.bash_profile
+load_skylab
 module list
 
-ulimit -s unlimited
-ulimit -v unlimited
+DO_ECBUILD='N'
+DO_MAKE='Y'
+DO_TEST='N' # run "ctest -R get_" before do whole ctest
+DO_RERUN='N'
+bundle_dir=${JEDI_ROOT}/jedi-bundle
+builds_dir=${JEDI_ROOT}/build
+#bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
+#builds_dir=/data/users/swei/Builds/jedi-ioda
+#bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
+#builds_dir=/data/users/swei/Builds/jedi-fv3
 
-export SLURM_EXPORT_ENV=ALL
-export HDF5_USE_FILE_LOCKING=FALSE
+testname="fv3jedi_test_tier1_forecast_fv3lm"
 
-cd /work/noaa/gsd-fv3-dev/swei/builds/jedi-fv3
-ctest -E get_
+cd $builds_dir
+[[ $DO_ECBUILD == 'Y' ]]&& ecbuild $bundle_dir
+[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 8
+if [ $DO_TEST == 'Y' ]; then
+    if [ -z $testname ]; then
+        if [ $DO_RERUN == 'Y' ]; then
+            ctest -E get_ --rerun-failed --output-on-failure
+        else
+            ctest -E get_ 
+        fi
+    else
+        ctest -VV -R $testname
+    fi
+fi
+#ctest -V -R hofx_save_geovals
 
 exit 0
