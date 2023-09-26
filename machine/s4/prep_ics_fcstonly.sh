@@ -1,8 +1,8 @@
 #!/bin/ksh
 
 ndate=/home/swei/bin/ndate.py
-fcstonly_expname='hazyda_aerov6_fcst'
-archive_expname='hazyda_aerov6'
+fcstonly_expname='hazyda_test_fcst'
+archive_expname='hazyda_ctrl'
 CDUMP='gfs'
 ARCDUMP='gdas'
 rDUMP=$ARCDUMP
@@ -10,8 +10,8 @@ rDUMP=$ARCDUMP
 ROTDIR=/scratch/users/swei/comrot/${fcstonly_expname}
 ARCDIR=/data/users/swei/archive/${archive_expname}
 
-SDATE=2020061000
-EDATE=2020071000
+SDATE=2020060300
+EDATE=2020060300
 H_INT=24
 
 CDATE=$SDATE

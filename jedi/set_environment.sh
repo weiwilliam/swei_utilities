@@ -12,9 +12,20 @@ if [[ -d /scratch1 ]] ; then
 elif [[ -d /carddata ]] ; then
     #. /opt/apps/lmod/3.1.9/init/sh
     target=s4
-    export JEDI_OPT=/data/users/mmiesch/modules
-    module use $JEDI_OPT/modulefiles/core
-    module load jedi/intel-impi
+    module purge
+    module use /data/prod/jedi/spack-stack/modulefiles
+    module load miniconda/3.9.12
+    module load ecflow/5.8.4
+    module use /data/prod/jedi/spack-stack/spack-stack-v1/envs/skylab-2.0.0-intel-2021.5.0/install/modulefiles/Core
+    module load stack-intel/2021.5.0
+    module load stack-intel-oneapi-mpi/2021.5.0
+    module load stack-python/3.9.12
+    module unuse /opt/apps/modulefiles/Compiler/intel/non-default/22
+    module unuse /opt/apps/modulefiles/Compiler/intel/22
+    module load jedi-fv3-env/1.0.0
+    module load jedi-ewok-env/1.0.0
+    module load soca-env/1.0.0
+    module load sp/2.3.3
     echo "git clone https://github.com/JCSDA/jedi-cmake.git"
     echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-S4-Intel.cmake <path-to-bundle>"
     echo "ecbuild -DMPIEXEC_EXECUTABLE=/usr/bin/srun -DMPIEXEC_NUMPROC_FLAG=\"-n\" <path-to-bundle>"

@@ -1,38 +1,50 @@
 #!/usr/bin/bash
 #SBATCH --job-name=swei_jedi_ctest
 #SBATCH --nodes=1
-#SBATCH --cpus-per-task=16
-#SBATCH --time=1:00:00
-#SBATCH --output=/data/users/swei/runlogs/jedi_ctest.%j.log
+##SBATCH --cpus-per-task=24
+#SBATCH --time=2:00:00
+#SBATCH --output=/data/users/swei/runlogs/jedi_build.%j.log
 ##SBATCH --mail-user=<email-address>
 
-source /etc/bashrc
-module purge
-module use /data/prod/jedi/spack-stack/modulefiles
-module load miniconda/3.9.12
-module load ecflow/5.8.4
-module use /data/prod/jedi/spack-stack/spack-stack-v1/envs/skylab-2.0.0-intel-2021.5.0/install/modulefiles/Core
-module load stack-intel/2021.5.0
-module load stack-intel-oneapi-mpi/2021.5.0
-module load stack-python/3.9.12
-module unuse /opt/apps/modulefiles/Compiler/intel/non-default/22
-module unuse /opt/apps/modulefiles/Compiler/intel/22
-module load jedi-fv3-env/1.0.0
-module load jedi-ewok-env/1.0.0
-module load soca-env/1.0.0
-module load sp/2.3.3
+set -x
 
-source /home/swei/.conda-source
+DO_ECBUILD='N'
+DO_MAKE='Y'
+DO_TEST='N' # run "ctest -R get_" before do whole ctest
+DO_RERUN='N'
+bundle_dir=/data/users/swei/Git/skylab/jedi-bundle
+builds_dir=/data/users/swei/Git/skylab/build
+#bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
+#builds_dir=/data/users/swei/Builds/jedi-ioda
+#bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
+#builds_dir=/data/users/swei/Builds/jedi-fv3
+
+testname="fv3jedi_test_tier1_forecast_fv3lm"
+
+source /etc/bashrc
+source /home/swei/.bash_profile
+load_skylab
+#module unload crtm
 module list
 ulimit -s unlimited
 
 export SLURM_EXPORT_ENV=ALL
 export HDF5_USE_FILE_LOCKING=FALSE
 
-builds_dir=/data/users/swei/Builds/jedi_fv3
-
 cd $builds_dir
-#ctest -E get_ --rerun-failed --output-on-failure
-ctest -E get_
+[[ $DO_ECBUILD == 'Y' ]]&& ecbuild $bundle_dir
+[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 8
+if [ $DO_TEST == 'Y' ]; then
+    if [ -z $testname ]; then
+        if [ $DO_RERUN == 'Y' ]; then
+            ctest -E get_ --rerun-failed --output-on-failure
+        else
+            ctest -E get_ 
+        fi
+    else
+        ctest -VV -R $testname
+    fi
+fi
+#ctest -V -R hofx_save_geovals
 
 exit 0
