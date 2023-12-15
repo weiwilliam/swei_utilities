@@ -20,8 +20,9 @@ export HDF5_USE_FILE_LOCKING='FALSE'
 
 #pyscript_home=/home/swei/research/pyscripts
 #pyscrpts_list="plot_ncens_rmse_spread.py" #create_ncens_rmse_spread.py"
-pyscript_home=/home/swei/Git/research/pyscripts/HazyDA
-pyscrpts_list='test.py'
+#pyscript_home=/home/swei/Git/research/pyscripts/HazyDA
+pyscript_home=/home/swei/Git/research/pyscripts/MAPP
+pyscrpts_list='pm25_stats.py'
 #pyscrpts_list='nccnv_sfc_biasrms_over_aod.py'
 #pyscrpts_list="nccnv_biasrms.py" 
 #pyscrpts_list="nccnv_gridded_omb.py"
