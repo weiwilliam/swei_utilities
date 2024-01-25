@@ -1,54 +1,58 @@
-#!/bin/ksh
-if [[ -d /scratch1 ]] ; then
-    . /apps/lmod/lmod/init/sh
-    target=hera
-    export JEDI_OPT=/scratch1/NCEPDEV/jcsda/jedipara/opt/modules
-    module use $JEDI_OPT/modulefiles/core
-    module purge
-    module load jedi/intel-impi/2020.2
-    export SLURM_ACCOUNT=gsd-fv3-dev
-    export SALLOC_ACCOUNT=$SLURM_ACCOUNT
-    export SBATCH_ACCOUNT=$SLURM_ACCOUNT
-elif [[ -d /carddata ]] ; then
-    #. /opt/apps/lmod/3.1.9/init/sh
-    target=s4
-    module purge
-    module use /data/prod/jedi/spack-stack/modulefiles
-    module load miniconda/3.9.12
-    module load ecflow/5.8.4
-    module use /data/prod/jedi/spack-stack/spack-stack-v1/envs/skylab-2.0.0-intel-2021.5.0/install/modulefiles/Core
-    module load stack-intel/2021.5.0
-    module load stack-intel-oneapi-mpi/2021.5.0
-    module load stack-python/3.9.12
-    module unuse /opt/apps/modulefiles/Compiler/intel/non-default/22
-    module unuse /opt/apps/modulefiles/Compiler/intel/22
-    module load jedi-fv3-env/1.0.0
-    module load jedi-ewok-env/1.0.0
-    module load soca-env/1.0.0
-    module load sp/2.3.3
-    echo "git clone https://github.com/JCSDA/jedi-cmake.git"
-    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-S4-Intel.cmake <path-to-bundle>"
-    echo "ecbuild -DMPIEXEC_EXECUTABLE=/usr/bin/srun -DMPIEXEC_NUMPROC_FLAG=\"-n\" <path-to-bundle>"
-    echo "make -j4"
-elif [[ -d /work ]]; then
-    . $MODULESHOME/init/sh
-    target=orion
-    export JEDI_OPT=/work/noaa/da/grubin/opt/modules
-    module use $JEDI_OPT/modulefiles/core
-    module load jedi/intel-impi
-    echo "git clone https://github.com/JCSDA/jedi-cmake.git"
-    echo "git clone https://github.com/jcsda/<jedi-bundle>"
-    echo "mkdir -p jedi/build; cd jedi/build"
-    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-Orion-Intel.cmake <path-to-bundle>"
-    echo "make -j4"
-elif [[ -d /glade ]] ; then
-    . $MODULESHOME/init/sh
-    target=cheyenne
-    module purge
-    export OPT=/glade/work/miesch/modules
-    module use $OPT/modulefiles/core
-    echo "git clone https://github.com/JCSDA/jedi-cmake.git"
-    echo "ecbuild --toolchain=<path-to-jedi-cmake>/jedi-cmake/cmake/Toolchains/jcsda-Cheyenne-Intel.cmake <path-to-bundle>"
-fi
-echo "It's on $target"
-module list
+#!/usr/bin/bash
+
+load_skylab () {
+    # Check whether $JEDI_ROOT/jedi-tools exist.
+    if [ ! -s $JEDI_ROOT/jedi-tools ]; then
+        echo "Please clone jedi-tools under $JEDI_ROOT first"
+    else
+        source $JEDI_ROOT/jedi-tools/
+    fi
+}
+
+pipreinstall (){
+    load_skylab
+    source $JEDI_ROOT/venv/bin/activate
+    repos="solo r2d2 ewok simobs skylab"
+    for dir in $repos
+    do
+        if [ ! -d $JEDI_SRC/$dir ]; then
+            cd $JEDI_SRC
+            git clone https://github.com/jcsda-internal/$dir
+        fi
+        if [ $dir -ne 'skylab' ]; then
+            cd $JEDI_SRC/$dir
+            python3 -m pip install -e .
+        fi
+    done
+}
+
+activate_skylab (){
+    start_ecf=$1
+    load_skylab
+    source $JEDI_ROOT/venv/bin/activate
+    source $JEDI_ROOT/activate.sh
+    case $start_ecf in
+    'Y'|'y')
+       ecflow_start.sh -p $ECF_PORT
+       ecflow_ui & ;;
+    *) ;;
+    esac
+}
+
+jumptolg (){
+    login_no=$1
+    ssh -Y Orion-login-${login_no}
+}
+
+show_exps (){
+    ecflow_client --suites
+}
+remove_exp (){
+    expid=$1
+    if [ ! -z $expid ]; then
+        ecflow_client --delete=force yes /$expid
+        [[ -d $JEDI_ROOT/workdir/$expid ]] && rm -rf $JEDI_ROOT/workdir/$expid
+        [[ -d $JEDI_ROOT/ecflow/$expid ]] && rm -rf $JEDI_ROOT/workdir/$expid
+    fi
+}
+
