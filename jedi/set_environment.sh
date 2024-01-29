@@ -1,5 +1,8 @@
 #!/usr/bin/bash
 
+echo "JEDI_ROOT: $JEDI_ROOT"
+echo "JEDI_SRC: $JEDI_SRC"
+
 load_skylab () {
     machine=$1
     compiler=$2
