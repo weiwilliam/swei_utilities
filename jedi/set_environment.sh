@@ -20,7 +20,6 @@ load_skylab () {
 }
 
 pipreinstall (){
-    load_skylab
     source $JEDI_ROOT/venv/bin/activate
     repos="solo r2d2 ewok simobs skylab"
     for dir in $repos
@@ -29,7 +28,7 @@ pipreinstall (){
             cd $JEDI_SRC
             git clone https://github.com/jcsda-internal/$dir
         fi
-        if [ $dir -ne 'skylab' ]; then
+        if [ $dir != 'skylab' ]; then
             cd $JEDI_SRC/$dir
             python3 -m pip install -e .
         fi
@@ -38,7 +37,6 @@ pipreinstall (){
 
 activate_skylab (){
     start_ecf=$1
-    load_skylab
     source $JEDI_ROOT/venv/bin/activate
     source $JEDI_ROOT/activate.sh
     case $start_ecf in
