@@ -1,0 +1,20 @@
+#!/usr/bin/bash
+#SBATCH --job-name=%JOBNAME%
+#SBATCH --nodes=%N_NODE%
+#SBATCH --ntasks=%N_TASK%
+#SBATCH --time=0:30:00
+#SBATCH --account=%ACCOUNT%
+#SBATCH --partition=%PARTITION%
+#SBATCH --qos=%QOS%
+#SBATCH --output=%LOGFILE%
+
+set -x
+
+export SLURM_EXPORT_ENV=ALL
+export HDF5_USE_FILE_LOCKING=FALSE
+
+export OOPS_TRACE=1
+export OOPS_DEBUG=1
+
+ulimit -s unlimited || true
+ulimit -v unlimited || true
