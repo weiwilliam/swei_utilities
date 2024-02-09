@@ -1,0 +1,9 @@
+slurm:
+  jobname:
+  n_node:
+  n_task:
+  account:
+  partition:
+  qos:
+jediexec:
+jediyaml:
