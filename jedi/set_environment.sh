@@ -36,15 +36,11 @@ pipreinstall (){
 }
 
 activate_skylab (){
-    start_ecf=$1
-    source $JEDI_ROOT/venv/bin/activate
-    source $JEDI_ROOT/activate.sh
-    case $start_ecf in
-    'Y'|'y')
-       ecflow_start.sh -p $ECF_PORT
-       ecflow_ui & ;;
-    *) ;;
-    esac
+    if [ ! -s $JEDI_ROOT/jedi-tools ]; then
+        echo "Please clone jedi-tools under $JEDI_ROOT first"
+    else
+	source $JEDI_ROOT/jedi-tools/buildscripts/setup.sh
+    fi
 }
 
 jumptolg (){
