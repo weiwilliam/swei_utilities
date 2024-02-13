@@ -5,7 +5,8 @@ slurm:
   account:
   partition:
   qos:
-wrkpath:
-logpath:
+mainpath:
+input:
+  - folders/to/be/under/Data
 jediexec:
 jediyaml:

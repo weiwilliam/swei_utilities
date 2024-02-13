@@ -15,15 +15,24 @@ slurm_ntask = str(conf['slurm']['n_task'])
 slurm_acct = conf['slurm']['account']
 slurm_part = conf['slurm']['partition']
 slurm_qos = conf['slurm']['qos']
+slurm_mpicmd = conf['slurm']['mpicmd']
 
 mainpath = conf['mainpath']
 wrkpath = os.path.join(mainpath,'workdir')
 logpath = os.path.join(mainpath,'logs')
+rundata = os.path.join(wrkpath,'Data')
 
 for d in [wrkpath,logpath]:
     if not os.path.exists(d):
         raise Exception('Please create '+d+' before running')
 wrksbatch = os.path.join(wrkpath,'run_sbatch')
+
+if not os.path.exists(rundata):
+    os.makedirs(rundata)
+
+for inpath in conf['input']:
+    dirname = inpath.split('/')[-1]
+    os.symlink(inpath,os.path.join(rundata,dirname))
 
 wrkexec = conf['jediexec']
 wrkyaml = os.path.join(mainpath,conf['jediyaml'])
@@ -46,7 +55,7 @@ with open(in_sbatch_tmpl, 'r') as file:
 with open(wrksbatch,'w') as file:
     file.write(new_content)
 
-cmd_str = 'srun --cpu_bind=core '+wrkexec+' '+wrkyaml #+' 2> stderr.$$.log 1> stdout.$$.log'
+cmd_str = slurm_mpicmd+' '+wrkexec+' '+wrkyaml #+' 2> stderr.$$.log 1> stdout.$$.log'
 with open(wrksbatch,'a') as f:
     f.write(cmd_str)
 
