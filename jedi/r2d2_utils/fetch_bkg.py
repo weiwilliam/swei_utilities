@@ -7,7 +7,7 @@ from r2d2 import R2D2Data
 member = R2D2Data.DEFAULT_INT_VALUE
 
 fetch = 1
-savedir = '/discover/nobackup/swei1/Git/save_geoval/Data/bkg'
+savedir = '/discover/nobackup/swei1/Git/save_geoval/input/bkg'
 date ='2021080506'
 fc_length = timedelta(hours=6)
 init_date = pd.to_datetime(date,format='%Y%m%d%H') - fc_length
@@ -46,13 +46,21 @@ for item in resultlist:
     print(item)
     if not fetch:
         continue
+   
+    if item['file_extension']!='':
+        suffix = '.'+item['file_extension']
+    else:
+        suffix = item['file_extension']
 
     if item['tile']==-9999:
-        bkgfile = item['file_type']+'.'+item['date'].strftime('%Y%m%d%H')+'.'+item['step']+'.nc'
+        bkgfile = item['file_type']+'.'+item['date'].strftime('%Y%m%d%H')+'.'+item['step']+suffix
     else:
-        bkgfile = item['file_type']+'.'+item['date'].strftime('%Y%m%d%H')+'.'+item['step']+'.tile'+str(item['tile'])+'.nc'
+        bkgfile = item['file_type']+'.'+item['date'].strftime('%Y%m%d%H')+'.'+item['step']+'.tile'+str(item['tile'])+suffix
     
     save_filename = os.path.join(savedir,bkgfile)
+    if os.path.exists(save_filename):
+        print('Skipped')
+        continue
     print('Saving to '+save_filename)
 
     R2D2Data.fetch(
