@@ -54,11 +54,14 @@ with open(in_sbatch_tmpl, 'r') as file:
     new_content = new_content.replace('%LOGFILE%',slurm_log)
 with open(wrksbatch,'w') as file:
     file.write(new_content)
+with open(wrksbatch,'a') as file:
+    file.write('cd '+wrkpath+'\n')
 
-cmd_str = slurm_mpicmd+' '+wrkexec+' '+wrkyaml #+' 2> stderr.$$.log 1> stdout.$$.log'
+if 'mpirun' in slurm_mpicmd:
+    cmd_str = slurm_mpicmd+' -n '+str(slurm_ntask)+' '+wrkexec+' '+wrkyaml
+else:
+    cmd_str = slurm_mpicmd+' '+wrkexec+' '+wrkyaml
 with open(wrksbatch,'a') as f:
-    f.write(cmd_str)
-
-sys.exit()
+    f.write(cmd_str+'\n')
 
 subprocess.check_output(["sbatch", wrksbatch]).decode('utf-8')
