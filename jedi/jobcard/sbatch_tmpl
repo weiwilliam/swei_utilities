@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 #SBATCH --job-name=%JOBNAME%
 #SBATCH --nodes=%N_NODE%
 #SBATCH --ntasks=%N_TASK%

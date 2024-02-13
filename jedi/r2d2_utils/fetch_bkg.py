@@ -8,7 +8,7 @@ member = R2D2Data.DEFAULT_INT_VALUE
 
 fetch = 1
 savedir = '/discover/nobackup/swei1/Git/save_geoval/Data/bkg'
-date ='2021081418'
+date ='2021080506'
 fc_length = timedelta(hours=6)
 init_date = pd.to_datetime(date,format='%Y%m%d%H') - fc_length
 step = 'PT6H'
