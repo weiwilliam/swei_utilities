@@ -7,7 +7,7 @@ from r2d2 import R2D2Data
 member = R2D2Data.DEFAULT_INT_VALUE
 
 fetch = 1
-savedir = '/discover/nobackup/swei1/Git/save_geoval/input/bkg'
+savedir = '/work2/noaa/jcsda/shihwei/data/bkg'
 date ='2021080506'
 fc_length = timedelta(hours=6)
 init_date = pd.to_datetime(date,format='%Y%m%d%H') - fc_length

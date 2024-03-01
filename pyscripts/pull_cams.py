@@ -3,10 +3,10 @@ import os,sys
 from utils import get_dates
 import cdsapi
 
-savepath='/data/users/swei/MAPP/model/cams_pm25'
+savepath='/work2/noaa/jcsda/shihwei/model/cams_pm25'
 
-sdate=2016010100
-edate=2016010118
+sdate=2016050200
+edate=2016050218
 hint=24
 
 dates = get_dates(sdate,edate,hint)

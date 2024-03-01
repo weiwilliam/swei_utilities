@@ -4,8 +4,8 @@ from r2d2 import R2D2Data
 import pandas as pd
 from datetime import timedelta
 
-fetch = 0
-savedir='/work2/noaa/jcsda/shihwei/data/obs'
+fetch = 1
+savedir='/work2/noaa/jcsda/shihwei/save_geoval/input/obs'
 date='2021080506'
 half_win = timedelta(hours=6)/2
 step='PT6H'

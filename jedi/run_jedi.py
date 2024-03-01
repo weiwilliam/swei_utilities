@@ -64,5 +64,7 @@ else:
 with open(wrksbatch,'a') as f:
     f.write(cmd_str+'\n')
 
+sys.exit()
+
 result = subprocess.check_output(["sbatch", wrksbatch]).decode('utf-8')
 print(result)
