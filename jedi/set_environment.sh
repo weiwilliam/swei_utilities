@@ -40,6 +40,7 @@ activate_skylab (){
         echo "Please clone jedi-tools under $JEDI_ROOT first"
     else
 	source $JEDI_ROOT/jedi-tools/buildscripts/setup.sh
+	module load metplus
     fi
 }
 
