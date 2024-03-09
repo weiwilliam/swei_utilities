@@ -93,7 +93,6 @@ def plot_scatter(data_dict, outpng, conf):
     axe_b = conf['image_spec']['axe_b']
     axe_t = conf['image_spec']['axe_t']
     pdpi = conf['image_spec']['dpi']
-
  
     fig=plt.figure()
     ax=plt.subplot(projection=proj)
