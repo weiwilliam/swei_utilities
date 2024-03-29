@@ -9,13 +9,13 @@
 set -x
 
 DO_ECBUILD='N'
-DO_MAKE='N'
-DO_TEST='Y' # run "ctest -R get_" before do whole ctest
+DO_MAKE='Y'
+DO_TEST='N' # run "ctest -R get_" before do whole ctest
 DO_RERUN='N'
-bundle_dir=/data/users/swei/Git/JEDI/genint-bundle
-builds_dir=/data/users/swei/Git/JEDI/genint-bundle/build
-#bundle_dir=/data/users/swei/Git/skylab/jedi-bundle
-#builds_dir=/data/users/swei/Git/skylab/build
+#bundle_dir=/data/users/swei/Git/JEDI/genint-bundle
+#builds_dir=/data/users/swei/Git/JEDI/genint-bundle/build
+bundle_dir=/data/users/swei/Git/skylab/jedi-bundle
+builds_dir=/data/users/swei/Git/skylab/build
 #bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
 #builds_dir=/data/users/swei/Builds/jedi-ioda
 #bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
@@ -23,11 +23,8 @@ builds_dir=/data/users/swei/Git/JEDI/genint-bundle/build
 
 testname="genint_*"
 
-source /etc/bashrc
-source /home/swei/.bash_profile
-load_skylab s4 intel
-module list
-ulimit -s unlimited
+ulimit -s unlimited || true
+ulimit -v unlimited || true
 
 export SLURM_EXPORT_ENV=ALL
 export HDF5_USE_FILE_LOCKING=FALSE
