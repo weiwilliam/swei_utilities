@@ -5,6 +5,7 @@ slurm:
   account:
   partition:
   qos:
+  mpicmd:
 mainpath:
 input:
   - folders/to/be/under/Data

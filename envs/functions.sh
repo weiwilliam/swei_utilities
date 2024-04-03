@@ -12,9 +12,30 @@ alias pbsdel='qdel'
 alias rda='cd /glade/campaign/collections/rda/data'
 
 # Other alias
-alias ftpds='sftp swei@data-access.ucar.edu'
+alias ftpds='sftp swei@data-access.ucar.edu:/glade/work/swei'
+alias ftpor='sftp shihwei@Orion-dtn.hpc.msstate.edu:/work2/noaa/jcsda/shihwei'
 alias psu='ps -ef | grep ${USER}'
 alias killstop='kill -9 `jobs -ps`'
 alias la='ls -a'
 alias lt='ls -lrt'
 
+#
+# slurm allocate
+#
+echo "alloc_a_node is available for following platforms:"
+echo "ds, s4, or"
+alloc_a_node(){
+case $1 in
+'ds')
+  salloc --partition=compute --qos=debug --account=s2127 --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+'s4')
+  salloc --partition=s4 --qos=debug --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+'or')
+  salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+*) 
+  echo "Not supported platform";;
+esac
+export HDF5_USE_FILE_LOCKING=FALSE
+export OOPS_TRACE=1
+export OOPS_DEBUG=1
+}
