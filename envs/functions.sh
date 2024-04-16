@@ -7,7 +7,7 @@ alias slurmlist='squeue -u ${USER} -o "%.10i %.9P %.6q %.35j %.8u %.8T %.10M %.1
 alias slurmdel='scancel'
 
 # PBS system: NCAR machine
-alias pbslist='qstat -u $USER'
+alias pbslist='qstat -w -u $USER'
 alias pbsdel='qdel'
 alias rda='cd /glade/campaign/collections/rda/data'
 
