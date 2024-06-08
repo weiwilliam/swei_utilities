@@ -6,14 +6,19 @@ from r2d2 import R2D2Data
 
 member = R2D2Data.DEFAULT_INT_VALUE
 
-fetch = 0
-savedir = '/data/users/swei/Dataset/jedi-data/bkg'
+fetch = 1
+savetopdir = '/work2/noaa/jcsda/shihwei/model'
+#savedir = '/data/users/swei/Dataset/jedi-data/bkg'
 date ='2021080506'
 fc_length = timedelta(hours=6)
 init_date = pd.to_datetime(date,format='%Y%m%d%H') - fc_length
 step = 'PT6H'
-model = 'gfs_aero'
+model = 'geos'
 expr = 'oper'
+
+savedir = f'{savetopdir}/{model}/{date}'
+if fetch and not os.path.exists(savedir):
+    os.makedirs(savedir)
 
 #resol = 'c90'
 #filetypes = ['bkg_clcv', 'abkg.eta']
