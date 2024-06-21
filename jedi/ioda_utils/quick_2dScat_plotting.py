@@ -13,7 +13,8 @@ from utils import setup_cmap
 from plot_utils import set_size
 
 # colorbar control
-cb_dict = {'name': 'MPL_jet',
+cb_dict = {'name': 'cosam',
+           'idxmax': 11,
            'ori': 'vertical',
            'frac': 0.025,
            'pad': 0.04,
@@ -22,10 +23,10 @@ cb_dict = {'name': 'MPL_jet',
            }
 
 # Area control
-area_dict = {'minlat': -90.,
-             'maxlat': 90.,
-             'minlon': -180.,
-             'maxlon': 180.,
+area_dict = {'minlat': 45.7237,
+             'maxlat': 84.1469,
+             'minlon': 77.9727,
+             'maxlon': 132.7391,
              }
 
 image_spec = {'axe_w': 8,
@@ -34,7 +35,7 @@ image_spec = {'axe_w': 8,
               'axe_r': 0.9,
               'axe_b': 0.1,
               'axe_t': 0.9,
-              'ptsize': 1.8,
+              'ptsize': 16,
               'dpi': 300,
               }
 
@@ -118,7 +119,7 @@ def plot_scatter(data_dict, outpng, conf):
     cbtcks = np.arange(vmin, vmax, vint)
     lvs = cbtcks
     clridx = []
-    for idx in np.linspace(2,128,cbtcks.size):
+    for idx in np.linspace(2,conf['colorbar']['idxmax'],cbtcks.size):
         clridx.append(int(idx))
     clrmap = setup_cmap(cb_name,clridx)
     norm = mpcrs.BoundaryNorm(lvs,len(clridx)+1,extend='both')
@@ -138,7 +139,8 @@ def plot_scatter(data_dict, outpng, conf):
         sc = ax.scatter(lons, lats, c=pltdata, s=ptsize, cmap=clrmap, 
                         norm=norm, transform=ccrs.PlateCarree())
 
-        ax.set_title(data_dict['name'],loc='left')
+        title_str = '%s %s_%i' % (data_dict['name'], plotdim, n)
+        ax.set_title(title_str, loc='left')
         cb = plt.colorbar(sc, orientation=cb_ori, ticks=lvs,
                           fraction=cb_frac,pad=cb_pad,aspect=cb_asp,label=cb_lbl)
         cb.ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0), useMathText=True)
