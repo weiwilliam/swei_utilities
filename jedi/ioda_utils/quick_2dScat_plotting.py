@@ -13,8 +13,8 @@ from utils import setup_cmap
 from plot_utils import set_size
 
 # colorbar control
-cb_dict = {'name': 'cosam',
-           'idxmax': 11,
+cb_dict = {'name': 'cmocean_gray',
+           'idxmax': 255,
            'ori': 'vertical',
            'frac': 0.025,
            'pad': 0.04,
@@ -23,10 +23,10 @@ cb_dict = {'name': 'cosam',
            }
 
 # Area control
-area_dict = {'minlat': 45.7237,
-             'maxlat': 84.1469,
-             'minlon': 77.9727,
-             'maxlon': 132.7391,
+area_dict = {'minlat': -90., # 45.7237,
+             'maxlat': 90., # 84.1469,
+             'minlon': -180., # 77.9727,
+             'maxlon': 180., # 132.7391,
              }
 
 image_spec = {'axe_w': 8,
@@ -35,13 +35,13 @@ image_spec = {'axe_w': 8,
               'axe_r': 0.9,
               'axe_b': 0.1,
               'axe_t': 0.9,
-              'ptsize': 16,
+              'ptsize': 0.001,
               'dpi': 300,
               }
 
 value_range = {'vmin': 0.,
                'vmax': 1.,
-               'vint': 0.1,
+               'vint': 0.01,
                }
 
 plot_conf = {'image_spec': image_spec,
@@ -141,7 +141,7 @@ def plot_scatter(data_dict, outpng, conf):
 
         title_str = '%s %s_%i' % (data_dict['name'], plotdim, n)
         ax.set_title(title_str, loc='left')
-        cb = plt.colorbar(sc, orientation=cb_ori, ticks=lvs,
+        cb = plt.colorbar(sc, orientation=cb_ori, # ticks=lvs,
                           fraction=cb_frac,pad=cb_pad,aspect=cb_asp,label=cb_lbl)
         cb.ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0), useMathText=True)
        
