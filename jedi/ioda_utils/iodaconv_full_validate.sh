@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 IODA_BUNDLE=$1
 converter=$2
 converter_output=$3
