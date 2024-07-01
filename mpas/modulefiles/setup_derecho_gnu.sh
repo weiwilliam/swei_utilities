@@ -11,5 +11,8 @@ module load conda
 conda activate npl
 export PYTHONPATH=/glade/campaign/mmm/wmr/mpas_tutorial/python_scripts
 module load ncview
-export PATH=$HOME/Git/utils/mpas/utils:/glade/work/swei/Git/MPAS/MPAS-Tools/mesh_tools/grid_rotate:/glade/work/swei/Git/MPAS/convert_mpas:/glade/campaign/mmm/wmr/mpas_tutorial/metis/bin:${PATH}
+MPAS_Gits=/glade/work/swei/Git/MPAS
+export PATH=$HOME/Git/utils/mpas/utils:${MPAS_Gits}/MPAS-Limited-Area:${MPAS_Gits}/MPAS-Tools/mesh_tools/grid_rotate:${MPAS_Gits}/convert_mpas:/glade/campaign/mmm/wmr/mpas_tutorial/metis/bin:${PATH}
 module reload gcc/13.2.0
+
+export NCARG_COLORMAPS=/glade/campaign/mmm/wmr/mpas_tutorial/ncl_colormaps/:$NCARG_ROOT/lib/ncarg/colormaps/
