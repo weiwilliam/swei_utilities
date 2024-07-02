@@ -2,11 +2,12 @@
 #SBATCH --job-name=%JOBNAME%
 #SBATCH --nodes=%N_NODE%
 #SBATCH --ntasks=%N_TASK%
-#SBATCH --time=0:30:00
+#SBATCH --time=%WALLTIME%
 #SBATCH --account=%ACCOUNT%
 #SBATCH --partition=%PARTITION%
 #SBATCH --qos=%QOS%
 #SBATCH --output=%LOGFILE%
+#SBATCH --mem=%MEMORY%
 
 set -x
 

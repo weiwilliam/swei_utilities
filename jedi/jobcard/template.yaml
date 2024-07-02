@@ -5,6 +5,8 @@ slurm:
   account:
   partition:
   qos:
+  memory:
+  walltime:
   mpicmd:
 mainpath:
 input:

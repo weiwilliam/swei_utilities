@@ -18,7 +18,8 @@ def isinside(lat_arr, lon_arr, poly_file):
     maxlat = np.ceil(df['Lat'].max()).astype(np.int32)
     minlon = np.floor(df['Lon'].min()).astype(np.int32)
     maxlon = np.ceil(df['Lon'].max()).astype(np.int32)
-   
+    print(f'min/max lat, min/max lon: {minlat}/{maxlat}, {minlon}/{maxlon}')   
+
     polygon_coords = list(zip(df['Lat'].values, df['Lon'].values))
     # Create a shapely Polygon object
     polygon = Polygon(polygon_coords)
@@ -26,9 +27,10 @@ def isinside(lat_arr, lon_arr, poly_file):
     near_mask = ((lat_arr > minlat) & (lat_arr < maxlat) &
                  (lon_arr > minlon) & (lon_arr < maxlon))
 
-    for i, (plat, plon) in enumerate(zip(lat_arr[near_mask], lon_arr[near_mask])):
-        point = Point(plat, plon)
-        out_mask[i] = polygon.contains(point)
+    for i, (plat, plon) in enumerate(zip(lat_arr, lon_arr)):
+        if near_mask[i]:
+            point = Point(plat, plon)
+            out_mask[i] = polygon.contains(point)
     del(df)
 
     return out_mask

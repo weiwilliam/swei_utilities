@@ -15,16 +15,19 @@ slurm_ntask = str(conf['slurm']['n_task'])
 slurm_acct = conf['slurm']['account']
 slurm_part = conf['slurm']['partition']
 slurm_qos = conf['slurm']['qos']
+slurm_memory = conf['slurm']['memory']
+slurm_walltime = conf['slurm']['walltime']
 slurm_mpicmd = conf['slurm']['mpicmd']
 
 mainpath = conf['mainpath']
-wrkpath = os.path.join(mainpath,'workdir')
-logpath = os.path.join(mainpath,'logs')
-rundata = os.path.join(wrkpath,'Data')
+wrkpath = os.path.join(mainpath, 'workdir')
+logpath = os.path.join(mainpath, 'logs')
+outpath = os.path.join(mainpath, 'output')
+rundata = os.path.join(wrkpath, 'Data')
 
-for d in [wrkpath,logpath]:
+for d in [wrkpath, logpath, outpath]:
     if not os.path.exists(d):
-        raise Exception('Please create '+d+' before running')
+        os.makedirs(d)
 wrksbatch = os.path.join(wrkpath,'run_sbatch')
 
 if not os.path.exists(rundata):
@@ -51,6 +54,8 @@ with open(in_sbatch_tmpl, 'r') as file:
     new_content = new_content.replace('%N_TASK%',slurm_ntask)
     new_content = new_content.replace('%PARTITION%',slurm_part)
     new_content = new_content.replace('%QOS%',slurm_qos)
+    new_content = new_content.replace('%MEMORY%',slurm_memory)
+    new_content = new_content.replace('%WALLTIME%',slurm_walltime)
     new_content = new_content.replace('%LOGFILE%',slurm_log)
 with open(wrksbatch,'w') as file:
     file.write(new_content)
@@ -63,8 +68,6 @@ else:
     cmd_str = slurm_mpicmd+' '+wrkexec+' '+wrkyaml
 with open(wrksbatch,'a') as f:
     f.write(cmd_str+'\n')
-
-sys.exit()
 
 result = subprocess.check_output(["sbatch", wrksbatch]).decode('utf-8')
 print(result)
