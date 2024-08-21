@@ -40,7 +40,7 @@ image_spec = {'axe_w': 8,
               }
 
 value_range = {'vmin': 0.,
-               'vmax': 1.,
+               'vmax': 0.6,
                'vint': 0.01,
                }
 

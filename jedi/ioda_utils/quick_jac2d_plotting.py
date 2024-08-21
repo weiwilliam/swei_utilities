@@ -11,10 +11,14 @@ from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from plot_utils import set_size
 
 # Area control
-area_dict = {'minlat': 65.,
-             'maxlat': 70.,
-             'minlon': 86.,
-             'maxlon': 91.,
+#area_dict = {'minlat': 65.,
+#             'maxlat': 70.,
+#             'minlon': 86.,
+#             'maxlon': 91.,
+area_dict = {'minlat': 36.5,
+             'maxlat': 41.5,
+             'minlon': 130.5,
+             'maxlon': 135.5,
              }
 
 image_spec = {'axe_w': 8,
