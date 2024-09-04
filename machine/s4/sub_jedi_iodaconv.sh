@@ -21,13 +21,20 @@ pyscript=$JEDI_ROOT/build/bin/viirs_aod2ioda.py
 
 source_dir="/ships19/aqda/bpierce/Satellite/VIIRS/AOD"
 
-sdate=2019070218
-edate=2019070218
+target_filename='viirs_npp_aod-thinned_p95'
+target_dir="/data/users/swei/Dataset/jedi-data/input/obs/viirs_npp_aod-thinned_p95"
+if [ ! -d $target_dir ]; then
+    mkdir -p $target_dir
+fi
+
+sdate=2019070106
+edate=2019073118
 hint=6
 
 cdate=$sdate
 until [ $cdate -gt $edate ]
 do
+  rm $wrktmp/*
   echo "Process for cycle $cdate"
   cyc=${cdate:8:2}
   pdy=${cdate:0:8}
@@ -47,10 +54,14 @@ do
   for file in `ls $filelist`
   do
     echo $file
+    tar -xf $file -C $wrktmp
   done
 
+  outfile=${target_dir}/${target_filename}.${cdate}.nc4
+
+  cd $wrktmp
   echo "$(date) Running: $pyscript"
-  # python $pyscript
+  python $pyscript -i *.nc -n 0.95 -o $outfile --mask default --method default
   echo "$(date) End: $pyscript"
   cdate=`$ndate $hint $cdate`
 done
