@@ -6,6 +6,7 @@
 #SBATCH --account=da-cpu
 #SBATCH --partition=orion
 #SBATCH --qos=batch
+#SBATCH --exclusive
 #SBATCH --output=/work2/noaa/jcsda/shihwei/slurmlogs/runpy.log.%j
 
 #Information of Orion
@@ -17,7 +18,7 @@ export SLURM_EXPORT_ENV=ALL
 export HDF5_USE_FILE_LOCKING='FALSE'
 
 running_under=/work2/noaa/jcsda/shihwei/data/viirs_j1_l1b
-pyscript="/work2/noaa/jcsda/shihwei/git/ioda-bundle/iodaconv/src/compo/viirs_l1bnc2ioda.py -i VJ102MOD/2021/217/VJ102MOD.A2021217.0[3-8]* -g VJ103MOD/2021/217/VJ103MOD.A2021217.0[3-8]* -n 0.995 -o multifiles_test.nc"
+pyscript="/work2/noaa/jcsda/shihwei/git/ioda-bundle/iodaconv/src/compo/viirs_l1bnc2ioda.py -i VJ102MOD/2021/217/VJ102MOD.A2021217.0[3-8]* -g VJ103MOD/2021/217/VJ103MOD.A2021217.0[3-8]* -n 0.995 -o obs.viirs_n20_albedo_l1b.2021080506.nc4"
 
 cd $running_under
 

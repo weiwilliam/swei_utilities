@@ -5,10 +5,10 @@
 ##SBATCH --cpus-per-task=1
 #SBATCH --account=da-cpu
 #SBATCH --partition=orion
-#SBATCH --qos=debug
-#SBATCH --time=0:15:00
-##SBATCH --qos=batch
-##SBATCH --time=2:30:00
+##SBATCH --qos=debug
+##SBATCH --time=0:15:00
+#SBATCH --qos=batch
+#SBATCH --time=2:30:00
 #SBATCH --output=/work2/noaa/jcsda/shihwei/slurmlogs/jedi_build.%j
 
 #Information of Orion
@@ -22,19 +22,16 @@ ulimit -v unlimited || true
 
 set -x
 
-source /etc/bashrc
-source /home/shihwei/.bashrc
-load_skylab
-module list
-
 DO_ECBUILD='N'
-DO_MAKE='N'
-DO_TEST='Y' # run "ctest -R get_" before do whole ctest
+DO_MAKE='Y'
+DO_TEST='N' # run "ctest -R get_" before do whole ctest
 DO_RERUN='N'
-bundle_dir=${JEDI_ROOT}/../git/genint-bundle
-builds_dir=${JEDI_ROOT}/../git/builds/genint
+#bundle_dir=${JEDI_ROOT}/../git/genint-bundle
+#builds_dir=${JEDI_ROOT}/../git/builds/genint
 #bundle_dir=${JEDI_ROOT}/jedi-bundle
 #builds_dir=${JEDI_ROOT}/build
+bundle_dir=${JEDI_ROOT}/../git/ioda-bundle
+builds_dir=${JEDI_ROOT}/../git/builds/ioda
 #bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
 #builds_dir=/data/users/swei/Builds/jedi-ioda
 #bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
