@@ -17,12 +17,14 @@ export HDF5_USE_FILE_LOCKING='FALSE'
 
 ndate="/home/swei/bin/ndate.py"
 wrktmp="/scratch/users/swei/wrktmp"
+mkdir -p $wrktmp
 pyscript=$JEDI_ROOT/build/bin/viirs_aod2ioda.py
 
 source_dir="/ships19/aqda/bpierce/Satellite/VIIRS/AOD"
 
-target_filename='viirs_npp_aod-thinned_p95'
-target_dir="/data/users/swei/Dataset/jedi-data/input/obs/viirs_npp_aod-thinned_p95"
+thinning=95
+target_filename="viirs_npp_aod-thinned_p${thinning}"
+target_dir="/data/users/swei/Dataset/jedi-data/input/obs/viirs_npp_aod-thinned_p${thinning}"
 if [ ! -d $target_dir ]; then
     mkdir -p $target_dir
 fi
@@ -61,7 +63,7 @@ do
 
   cd $wrktmp
   echo "$(date) Running: $pyscript"
-  python $pyscript -i *.nc -n 0.95 -o $outfile --mask default --method default
+  python $pyscript -i *.nc -n 0.${thinning} -o $outfile --mask maskout --method default
   echo "$(date) End: $pyscript"
   cdate=`$ndate $hint $cdate`
 done

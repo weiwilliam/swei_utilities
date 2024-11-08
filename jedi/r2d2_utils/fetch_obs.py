@@ -6,23 +6,18 @@ from datetime import timedelta
 from utils import get_dates
 
 fetch = 1
-<<<<<<< Updated upstream
 savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tempo_no2_tropo-full'
-sdate = '2024061000'
+# savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tropomi_s5p_no2_tropo-full'
+# savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/ioda_tempo_no2_tropo-full'
+sdate = '2024060100'
 edate = '2024063018'
-=======
-savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/ioda_tempo_no2_tropo-full'
-#savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tempo_no2_tropo-full'
-sdate = '2024061000'
-edate = '2024061000'
->>>>>>> Stashed changes
 hint = 6
 half_win = timedelta(hours=hint)/2
 step = 'PT6H'
 #win_beg = (pd.to_datetime(date,format='%Y%m%d%H')-half_win).strftime('%Y-%m-%dT%H:00:00Z')
 #obsname = 'tropomi_s5p_co_total'
-obsname = 'tempo_no2_tropo'
-provider = 'nasa'
+obsname = 'tropomi_s5p_no2_tropo'
+provider = 'esa' # 'nasa'
 file_extension = 'nc4'
 
 print(f'Search {obsname} for cycle {sdate} to {edate} every {hint} hours from Provider: {provider}')

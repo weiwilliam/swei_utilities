@@ -12,17 +12,15 @@
 #SBATCH --output=/data/users/swei/runlogs/sub_py_log.%j
 
 source /etc/profile
-source /home/swei/.conda-source
-module load miniconda/3.8-s4
-conda activate swei
+activate_skylab
 
 export HDF5_USE_FILE_LOCKING='FALSE'
 
 #pyscript_home=/home/swei/research/pyscripts
 #pyscrpts_list="plot_ncens_rmse_spread.py" #create_ncens_rmse_spread.py"
 #pyscript_home=/home/swei/Git/research/pyscripts/HazyDA
-pyscript_home=/home/swei/Git/research/pyscripts/MAPP
-pyscrpts_list='pm25_stats.py'
+pyscript_home=/data/users/swei/Git/JEDI/JEDI-METplus/pyscripts
+pyscrpts_list='hofx_plotting.py'
 #pyscrpts_list='nccnv_sfc_biasrms_over_aod.py'
 #pyscrpts_list="nccnv_biasrms.py" 
 #pyscrpts_list="nccnv_gridded_omb.py"

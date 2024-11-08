@@ -41,6 +41,7 @@ states_name = {'mass_fraction_of_dust001_in_air':'du001',
                'mass_fraction_of_sea_salt002_in_air':'ss002',
                'mass_fraction_of_sea_salt003_in_air':'ss003',
                'mass_fraction_of_sea_salt004_in_air':'ss004',
+               'mass_fraction_of_sea_salt005_in_air':'ss005',
                'mass_fraction_of_hydrophobic_black_carbon_in_air':'bc1',
                'mass_fraction_of_hydrophilic_black_carbon_in_air':'bc2',
                'mass_fraction_of_hydrophobic_organic_carbon_in_air':'oc1',
@@ -83,12 +84,8 @@ class read_ioda(object):
         obs_ds = xr.open_dataset(self.iodafile,group='ObsValue').sel(Location=area_mask==1)
         hofx_ds = xr.open_dataset(self.iodafile,group='hofx').sel(Location=area_mask==1)
 
-        # mask = area_mask & qc_mask
-        # print(np.count_nonzero(area_mask))
-        # print(np.count_nonzero(mask))
-
         data_dict = {}
-        jac_ds = xr.open_dataset(self.diagfile) 
+        jac_ds = xr.open_dataset(self.diagfile)
         jac_ds = jac_ds.rename_dims({'nlocs':'Location'})
         jac_ds = jac_ds.sel(Location=area_mask==1)
         nlocs = jac_ds.Location.size
