@@ -23,7 +23,7 @@ alias lt='ls -lrt'
 # slurm allocate
 #
 echo "alloc_a_node is available for following platforms:"
-echo "ds, s4, or"
+echo "ds, s4, or, dr"
 alloc_a_node(){
 case $1 in
 'ds')
@@ -32,6 +32,9 @@ case $1 in
   salloc --partition=s4 --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
 'or')
   salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+'dr')
+  qinteractive --ntasks 6 --mem 96GB -l walltime=02:00:00 -l job_priority=economy @derecho ;;
+  #qsub -I -X -V -l select=1:ncpus=1:mem=32GB -A UALB0044 -q main -l walltime=1:00:00 -l job_priority=economy  ;;
 *) 
   echo "Not supported platform";;
 esac

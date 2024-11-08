@@ -6,9 +6,16 @@ from datetime import timedelta
 from utils import get_dates
 
 fetch = 1
+<<<<<<< Updated upstream
 savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tempo_no2_tropo-full'
 sdate = '2024061000'
 edate = '2024063018'
+=======
+savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/ioda_tempo_no2_tropo-full'
+#savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tempo_no2_tropo-full'
+sdate = '2024061000'
+edate = '2024061000'
+>>>>>>> Stashed changes
 hint = 6
 half_win = timedelta(hours=hint)/2
 step = 'PT6H'
