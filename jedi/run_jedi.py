@@ -66,9 +66,12 @@ if 'mpirun' in slurm_mpicmd:
     cmd_str = slurm_mpicmd+' -n '+str(slurm_ntask)+' '+wrkexec+' '+wrkyaml
 else:
     cmd_str = slurm_mpicmd+' '+wrkexec+' '+wrkyaml
+
 with open(wrksbatch,'a') as f:
     f.write(cmd_str+'\n')
 
 output = subprocess.run(["sbatch", wrksbatch], capture_output=True)
 stdout = output.stdout.decode('utf-8')
+stderr = output.stderr.decode('utf-8')
 print(stdout)
+print(stderr)
