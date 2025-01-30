@@ -61,7 +61,7 @@ remove_exp (){
     if [ ! -z $expid ]; then
         ecflow_client --delete=force yes /$expid
         [[ -d $JEDI_ROOT/workdir/$expid ]] && rm -rf $JEDI_ROOT/workdir/$expid
-        [[ -d $JEDI_ROOT/ecflow/$expid ]] && rm -rf $JEDI_ROOT/workdir/$expid
+        [[ -d $JEDI_ROOT/ecflow/$expid ]] && rm -rf $JEDI_ROOT/ecflow/$expid
     fi
 }
 
