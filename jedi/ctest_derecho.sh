@@ -14,14 +14,10 @@ DO_ECBUILD='N'
 DO_MAKE='Y'
 DO_TEST='N' # run "ctest -R get_" before do whole ctest
 DO_RERUN='N'
-bundle_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle
-builds_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle/build
-#bundle_dir=/data/users/swei/Git/skylab/jedi-bundle
-#builds_dir=/data/users/swei/Git/skylab/build
-#bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
-#builds_dir=/data/users/swei/Builds/jedi-ioda
-#bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
-#builds_dir=/data/users/swei/Builds/jedi-fv3
+#bundle_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle
+#builds_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle/build
+bundle_dir=/glade/work/swei/skylab/
+builds_dir=/glade/work/swei/skylab/build
 
 testname="genint_*"
 

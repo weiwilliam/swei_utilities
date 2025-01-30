@@ -13,6 +13,7 @@ load_skylab () {
         if [ -s $JEDI_ROOT/jedi-tools/buildscripts/setup/${machine}_setup_${compiler}.sh ]; then 
             source $JEDI_ROOT/jedi-tools/buildscripts/setup/${machine}_setup_${compiler}.sh
 	    module load jedi-fv3-env
+            module load jedi-mpas-env
             module load ewok-env
             module load soca-env
             module load metplus
