@@ -26,18 +26,12 @@ DO_ECBUILD='N'
 DO_MAKE='Y'
 DO_TEST='N' # run "ctest -R get_" before do whole ctest
 DO_RERUN='N'
-#bundle_dir=${JEDI_ROOT}/../git/genint-bundle
-#builds_dir=${JEDI_ROOT}/../git/builds/genint
-#bundle_dir=${JEDI_ROOT}/jedi-bundle
-#builds_dir=${JEDI_ROOT}/build
-bundle_dir=${JEDI_ROOT}/../git/ioda-bundle
-builds_dir=${JEDI_ROOT}/../git/builds/ioda
-#bundle_dir=/data/users/swei/Git/JEDI/ioda-bundle
-#builds_dir=/data/users/swei/Builds/jedi-ioda
-#bundle_dir=/data/users/swei/Git/JEDI/fv3-bundle
-#builds_dir=/data/users/swei/Builds/jedi-fv3
+#bundle_dir=/work2/noaa/jcsda/shihwei/git/newgeninttest/genint-bundle
+#builds_dir=/work2/noaa/jcsda/shihwei/git/newgeninttest/genint-bundle/build
+bundle_dir=${JEDI_ROOT}/jedi-bundle
+builds_dir=${JEDI_ROOT}/build
 
-testname="genint_test_hofx3d_lambertCC"
+testname="quenchxx_test_genint_*"
 #testname="fv3jedi_test_tier1_forecast_fv3lm"
 
 cd $builds_dir

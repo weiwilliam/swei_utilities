@@ -6,10 +6,10 @@ from r2d2 import R2D2Data
 
 member = R2D2Data.DEFAULT_INT_VALUE
 
-fetch = 1
-#savetopdir = '/work2/noaa/jcsda/shihwei/model'
-savetopdir = '/data/users/swei/Dataset/jedi-data/bkg'
-date ='2021080506'
+fetch = 0
+#savetopdir = '/data/users/swei/Dataset/jedi-data/bkg'
+savetopdir = '/work2/noaa/jcsda/shihwei/data/jedi-data/input/bkg'
+date ='2022021518'
 fc_length = timedelta(hours=6)
 init_date = pd.to_datetime(date,format='%Y%m%d%H') - fc_length
 step = 'PT6H'

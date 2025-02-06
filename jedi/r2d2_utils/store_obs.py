@@ -5,7 +5,7 @@ import pandas as pd
 from datetime import timedelta
 from utils import get_dates
 
-store = 0
+store = 1
 targetdir = '/work2/noaa/jcsda/shihwei/data/jedi-data/input/obs/viirs_j1_albedo-thinned_p99'
 sdate = '2021082318'
 edate = '2021082318'

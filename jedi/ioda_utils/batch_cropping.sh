@@ -1,16 +1,20 @@
 #!/usr/bin/env bash
-orig_ioda_path='/data/users/swei/Dataset/VIIRS_NPP/ioda_viirs_aod'
-crop_ioda_path='/data/users/swei/Dataset/VIIRS_NPP/ioda_viirs_aod-wxaq'
+jedi_datapath='/work2/noaa/jcsda/shihwei/data/jedi-data/input/obs'
 
-croppy='/home/swei/Git/utils/jedi/ioda_utils/crop_iodafile.py'
-polyfile='/data/users/swei/Git/JEDI/JEDI-METplus/etc/polygons/wxaq_polygon.csv'
-var='aerosolOpticalDepth'
 prefix='wxaq'
+obsname="tempo_no2_tropo"
+orig_ioda_path="${jedi_datapath}/${obsname}-full"
+crop_ioda_path="${jedi_datapath}/${obsname}-${prefix}"
 
-for file in `ls $orig_ioda_path`
+croppy="${HOME}/Git/utils/jedi/ioda_utils/crop_iodafile.py"
+polyfile='/work2/noaa/jcsda/shihwei/git/JEDI-METplus/etc/polygons/wxaq_polygon.csv'
+
+for file in `ls ${orig_ioda_path}/obs.${obsname}.*`
 do
-    echo "Processing ${file}"
-    in_file=${orig_ioda_path}/${file}
-    outfile=${crop_ioda_path}/${prefix}-${file}
-    $croppy -i ${in_file} -o ${outfile} -v ${var} -p ${polyfile}
+    timetag=`echo $(basename $file) | sed -e 's/\./ /g' | awk '{print $(NF-1)}'`
+    suffix=`echo $(basename $file) | sed -e 's/\./ /g' | awk '{print $(NF)}'`
+    in_file=${file}
+    outfile=${crop_ioda_path}/obs.${obsname}-${prefix}.${timetag}.${suffix}
+    echo "Processing `basename ${file}` to `basename ${outfile}`"
+    $croppy -i ${in_file} -o ${outfile} -p ${polyfile}
 done

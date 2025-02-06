@@ -35,7 +35,7 @@ if not os.path.exists(rundata):
 
 for inpath in conf['input']:
     dirname = inpath.split('/')[-1]
-    os.symlink(inpath,os.path.join(rundata,dirname))
+    os.symlink(inpath, os.path.join(rundata,dirname))
 
 wrkexec = conf['jediexec']
 wrkyaml = os.path.join(mainpath,conf['jediyaml'])

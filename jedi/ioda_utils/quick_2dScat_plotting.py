@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-import os, sys
+import os, sys, re
 import argparse
 from pathlib import Path
 import numpy as np
@@ -10,11 +10,12 @@ import cartopy.crs as ccrs
 from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 
 from utils import setup_cmap
+from refdict import ops
 from plot_utils import set_size
 
 # colorbar control
-cb_dict = {'name': 'cmocean_gray',
-           'idxmax': 255,
+cb_dict = {'name': 'MPL_jet', # 'cmocean_gray',
+           'idxmax': 127, #255,
            'ori': 'vertical',
            'frac': 0.025,
            'pad': 0.04,
@@ -23,11 +24,16 @@ cb_dict = {'name': 'cmocean_gray',
            }
 
 # Area control
-area_dict = {'minlat': -90., # 45.7237,
+area_dict = {'minlat': -90.,
              'maxlat': 90., # 84.1469,
              'minlon': -180., # 77.9727,
              'maxlon': 180., # 132.7391,
              }
+#area_dict = {'minlat': 5., # 45.7237,
+#             'maxlat': 33.5, # 84.1469,
+#             'minlon': -42.5, # 77.9727,
+#             'maxlon': -13., # 132.7391,
+#             }
 
 image_spec = {'axe_w': 8,
               'axe_h': 5,
@@ -35,7 +41,7 @@ image_spec = {'axe_w': 8,
               'axe_r': 0.9,
               'axe_b': 0.1,
               'axe_t': 0.9,
-              'ptsize': 0.001,
+              'ptsize': 1, #0.001,
               'dpi': 300,
               }
 
@@ -55,6 +61,12 @@ class read_ioda(object):
         self.iodafile = in_dict['iodafile']
         self.vargroup = in_dict['group']
         self.varname = in_dict['varname']
+        masking = False
+        if 'mask' in in_dict.keys():
+           maskgrp = in_dict['mask']['group']
+           maskopr = in_dict['mask']['operator']
+           maskval = in_dict['mask']['value']
+           masking = True
 
         dims_ds = xr.open_dataset(self.iodafile)
         channel = dims_ds.Channel.values
@@ -62,6 +74,14 @@ class read_ioda(object):
         meta_ds = xr.open_dataset(self.iodafile,group='MetaData')
         lons = meta_ds.longitude
         lats = meta_ds.latitude
+        if masking:
+            msk_ds = xr.open_dataset(self.iodafile,group=maskgrp)
+            msk_ds = msk_ds.assign_coords(Channel=channel.astype(np.int32))
+            mask = maskopr(msk_ds[self.varname], maskval)
+            print(f'mask with {maskgrp} {maskopr} {maskval}')
+        else:
+            mask = ~np.isnan(lons.data)
+            print(f'no masking')
 
         data_ds = xr.open_dataset(self.iodafile,group=self.vargroup)
         data_ds = data_ds.assign_coords(Channel=channel.astype(np.int32))
@@ -70,6 +90,7 @@ class read_ioda(object):
             sel_dict = {in_dict['dim']:in_dict['dimidx']}
             print(sel_dict)
             data = data_ds[self.varname].sel(sel_dict)
+            mask = mask.sel(sel_dict)
         else:
             data = data_ds[self.varname]
         
@@ -78,6 +99,8 @@ class read_ioda(object):
                          'lons':lons,
                          'lats':lats,
                          'data':data,
+                         'masking':masking,
+                         'maskarr':mask,
                          'plotdim':in_dict['dim'],
                          }
         meta_ds.close()
@@ -87,6 +110,8 @@ def plot_scatter(data_dict, outpng, conf):
     proj = ccrs.PlateCarree()
     lons = data_dict['lons']
     lats = data_dict['lats']
+    masking = data_dict['masking']
+    maskarr = data_dict['maskarr']
     data = data_dict['data']
     plotdim = data_dict['plotdim']
 
@@ -125,7 +150,12 @@ def plot_scatter(data_dict, outpng, conf):
     norm = mpcrs.BoundaryNorm(lvs,len(clridx)+1,extend='both')
 
     for n in data[plotdim].values:
-        pltdata = data.sel({plotdim:[n]})
+        pltdata = data.sel({plotdim:[n]}).data[:,0]
+        if masking:
+            pltmask = maskarr.sel({plotdim:[n]}).data[:,0]
+        else:
+            pltmask = maskarr
+        print(pltmask)
         fig=plt.figure()
         ax=plt.subplot(projection=proj)
         set_size(axe_w, axe_h, l=axe_l, b=axe_b, r=axe_r, t=axe_t)
@@ -136,7 +166,7 @@ def plot_scatter(data_dict, outpng, conf):
         gl.top_labels=False
         gl.xformatter=LongitudeFormatter(degree_symbol=u'\u00B0 ')
         gl.yformatter=LatitudeFormatter(degree_symbol=u'\u00B0 ')
-        sc = ax.scatter(lons, lats, c=pltdata, s=ptsize, cmap=clrmap, 
+        sc = ax.scatter(lons[pltmask], lats[pltmask], c=pltdata[pltmask], s=ptsize, cmap=clrmap, 
                         norm=norm, transform=ccrs.PlateCarree())
 
         title_str = '%s %s_%i' % (data_dict['name'], plotdim, n)
@@ -177,6 +207,11 @@ if __name__ == '__main__':
         type=str, default='Channel')
 
     parser.add_argument(
+        '--mask',
+        help="plotting mask",
+        type=str, default=None)
+
+    parser.add_argument(
         '-o', '--outpng',
         help="image name ",
         type=str, required=True)
@@ -198,6 +233,17 @@ if __name__ == '__main__':
             in_dict['dimidx'] = int_idx
     else:
         in_dict['dim'] = args.dim
+
+    if args.mask:
+        in_dict['mask'] = {}
+        pattern = r'([a-zA-Z_][a-zA-Z0-9_]*)(==|!=|>=|<=|>|<)(\d+(\.\d+)?)'
+        match = re.match(pattern, args.mask)
+        in_dict['mask']['group'] = match.group(1)
+        in_dict['mask']['operator'] = ops[match.group(2)]
+        if 'QC' in in_dict['mask']['group']:
+            in_dict['mask']['value'] = int(match.group(3))
+        else:
+            in_dict['mask']['value'] = float(match.group(3))
 
     print(in_dict)
 

@@ -11,20 +11,21 @@ from cartopy.mpl.ticker import LongitudeFormatter, LatitudeFormatter
 from plot_utils import set_size
 
 # Area control
+plot_channel = [4]
 #area_dict = {'minlat': 65.,
 #             'maxlat': 70.,
 #             'minlon': 86.,
 #             'maxlon': 91.,
-area_dict = {'minlat': 36.5,
-             'maxlat': 41.5,
-             'minlon': 130.5,
-             'maxlon': 135.5,
+area_dict = {'minlat': 5.,
+             'maxlat': 33.5,
+             'minlon': -42.5,
+             'maxlon': -13.,
              }
 
-image_spec = {'axe_w': 8,
+image_spec = {'axe_w': 9,
               'axe_h': 5,
               'axe_l': 0.1,
-              'axe_r': 0.9,
+              'axe_r': 0.95,
               'axe_b': 0.1,
               'axe_t': 0.9,
               'dpi': 300,
@@ -47,6 +48,9 @@ states_name = {'mass_fraction_of_dust001_in_air':'du001',
                'mass_fraction_of_hydrophobic_organic_carbon_in_air':'oc1',
                'mass_fraction_of_hydrophilic_organic_carbon_in_air':'oc2',
                'mass_fraction_of_sulfate_in_air':'sulf',
+               'air_temperature':'T',
+               'mole_fraction_of_ozone_in_air':'o3',
+               'water_vapor_mixing_ratio_wrt_dry_air':'mixr',
                }
 
 plot_conf = {'image_spec': image_spec,
@@ -70,6 +74,7 @@ class read_ioda(object):
 
         dim_ds = xr.open_dataset(self.iodafile)
         channel = dim_ds.Channel.values.astype(np.int32)
+        print(channel)
 
         meta_ds = xr.open_dataset(self.iodafile,group='MetaData')
         lons = meta_ds.longitude
@@ -78,8 +83,8 @@ class read_ioda(object):
         print(area_mask.shape)
 
         qc_ds = xr.open_dataset(self.iodafile,group='PreQC').sel(Location=area_mask==1)
-        qc_mask = qc_ds[self.varname]==0
-        print(qc_mask.shape)
+        #qc_mask = qc_ds[self.varname]==0
+        #print(qc_mask.shape)
 
         obs_ds = xr.open_dataset(self.iodafile,group='ObsValue').sel(Location=area_mask==1)
         hofx_ds = xr.open_dataset(self.iodafile,group='hofx').sel(Location=area_mask==1)
@@ -89,16 +94,16 @@ class read_ioda(object):
         jac_ds = jac_ds.rename_dims({'nlocs':'Location'})
         jac_ds = jac_ds.sel(Location=area_mask==1)
         nlocs = jac_ds.Location.size
-        tmpdim = '%s_jacobian_%s_%i_nval' % (self.varname, list(conf['states'].keys())[0], channel[0])
+        tmpdim = '%s_jacobian_%s_%i_nval' % (self.varname, list(conf['states'].keys())[0], plot_channel[0])
         nlevs = jac_ds[tmpdim].size
         if conf['image_spec']['x']=='state':
-            for n in range(channel.size):
+            for n in plot_channel:
                 jac_data = np.zeros((nlocs, nlevs, len(conf['states'])), dtype='float32')
                 for v in range(len(conf['states'])):
                     var = list(conf['states'].keys())[v]
-                    jacname = '%s_jacobian_%s_%i' % (self.varname, var, channel[n])
+                    jacname = '%s_jacobian_%s_%i' % (self.varname, var, n)
                     jac_data[:, :, v] = jac_ds[jacname].values
-                    dataname = '%s_%i' % (self.varname, channel[n])
+                    dataname = '%s_%i' % (self.varname, n)
                 data_dict[dataname] = (['Location', 'Level', 'States'], jac_data)
         elif conf['image_spec']['x']=='channel':
             for var in conf['states'].keys():
@@ -150,7 +155,8 @@ def plot_profile(data_dict, outpng, conf):
         looparray = ds['States'].values
     elif xdimname == 'state':
         looparray = []
-        for nc in ds['Channel'].values:
+        for nc in plot_channel:
+        #for nc in ds['Channel'].values:
             looparray.append('%s_%i' %(varname,nc))
 
     for var in looparray:
@@ -161,12 +167,10 @@ def plot_profile(data_dict, outpng, conf):
         fig=plt.figure()
         ax=plt.subplot()
         set_size(axe_w, axe_h, l=axe_l, b=axe_b, r=axe_r, t=axe_t)
-        tmpda.plot.imshow(cmap='RdBu', center=0.)
+        tmpda.plot.imshow(cmap='RdBu_r', center=0., robust=True)
 
         ax.set_title(data_dict['varname'],loc='left')
         ax.invert_yaxis()
-        #cb = plt.colorbar(sc,orientation=cb_ori,fraction=cb_frac,pad=cb_pad,aspect=cb_asp,label=cb_lbl)
-        #cb.ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0), useMathText=True)
 
         pngfile = f'{outpng}_{var}.png'
         fig.savefig(pngfile,dpi=pdpi)

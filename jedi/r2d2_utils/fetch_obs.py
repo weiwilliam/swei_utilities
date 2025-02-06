@@ -5,12 +5,12 @@ import pandas as pd
 from datetime import timedelta
 from utils import get_dates
 
-fetch = 1
+fetch = 0
 savedir = '/work2/noaa/jcsda/shihwei/data/jedi-data/input/obs/tempo_no2_tropo-full'
 # savedir = '/data/users/swei/Dataset/jedi-data/input/obs/tropomi_s5p_no2_tropo-full'
 # savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/ioda_tempo_no2_tropo-full'
 sdate = '2024082200'
-edate = '2024090100'
+edate = '2024082300'
 hint = 1
 half_win = timedelta(hours=hint)/2
 step = 'PT1H'
