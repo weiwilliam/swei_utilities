@@ -56,6 +56,7 @@ jumptolg (){
 show_exps (){
     ecflow_client --suites
 }
+
 remove_exp (){
     expid=$1
     if [ ! -z $expid ]; then
@@ -65,3 +66,12 @@ remove_exp (){
     fi
 }
 
+iodaconvtest (){
+    test_conv=$1
+    test_input=$2
+    test_output=$3
+    pycodestyle --config=$JEDI_SRC/iodaconv/.pycodestyle $test_conv
+    nccmp $2 $3 -d -m -g -f -S -T 0.0
+    $JEDI_BUILD/bin/ioda-validate.x --ignore-warn --ignore-error \
+         $JEDI_SRC/ioda/share/ioda/yaml/validation/ObsSpace.yaml $test_input
+}

@@ -14,7 +14,7 @@ alias rda='cd /glade/campaign/collections/rda/data'
 # Other alias
 alias ftpds='sftp swei@data-access.ucar.edu:/glade/work/swei'
 alias ftpor='sftp shihwei@Orion-dtn.hpc.msstate.edu:/work2/noaa/jcsda/shihwei'
-alias psu='ps -ef | grep ${USER}'
+alias psu='ps -ef | grep ^${USER}'
 alias killstop='kill -9 `jobs -ps`'
 alias la='ls -a'
 alias lt='ls -lrt'
@@ -33,8 +33,7 @@ case $1 in
 'or')
   salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
 'dr')
-  qinteractive --ntasks 6 --mem 96GB -l walltime=02:00:00 -l job_priority=economy @derecho ;;
-  #qsub -I -X -V -l select=1:ncpus=1:mem=32GB -A UALB0044 -q main -l walltime=1:00:00 -l job_priority=economy  ;;
+  qinteractive -V --ntasks 6 --mem 96GB -A $2 -q develop -l walltime=02:00:00 -l job_priority=economy @derecho ;;
 *) 
   echo "Not supported platform";;
 esac

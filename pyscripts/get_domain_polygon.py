@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
+import sys
 import netCDF4 as nc
 import pandas as pd
 
-wrfout = './wrfout_d01_20240117_180000.nc'
+wrfout = sys.argv[1]
 
 ncd = nc.Dataset(wrfout, 'r')
 
@@ -31,3 +32,5 @@ for outlat, outlon in zip(lat[-2::-1,0],lon[-2::-1,0]):
 df = pd.DataFrame({'Lat':latlist,'Lon':lonlist})
 
 df.to_csv('domain_polygon.csv',index=False)
+
+ncd.close()
