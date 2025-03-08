@@ -46,7 +46,7 @@ image_spec = {'axe_w': 8,
               }
 
 value_range = {'vmin': 0.,
-               'vmax': 0.6,
+               'vmax': 1.,
                'vint': 0.01,
                }
 
@@ -64,6 +64,7 @@ class read_ioda(object):
         masking = False
         if 'mask' in in_dict.keys():
            maskgrp = in_dict['mask']['group']
+           maskch = in_dict['mask']['channel']
            maskopr = in_dict['mask']['operator']
            maskval = in_dict['mask']['value']
            masking = True
@@ -75,10 +76,14 @@ class read_ioda(object):
         lons = meta_ds.longitude
         lats = meta_ds.latitude
         if masking:
-            msk_ds = xr.open_dataset(self.iodafile,group=maskgrp)
+            msk_ds = xr.open_dataset(self.iodafile, group=maskgrp)
             msk_ds = msk_ds.assign_coords(Channel=channel.astype(np.int32))
-            mask = maskopr(msk_ds[self.varname], maskval)
-            print(f'mask with {maskgrp} {maskopr} {maskval}')
+            if maskch is None:
+                mask = maskopr(msk_ds[self.varname], maskval)
+                print(f'mask with {maskgrp} {maskopr} {maskval}')
+            else:
+                mask = maskopr(msk_ds[self.varname].sel(Channel=maskch), maskval)
+                print(f'mask with {maskgrp} channel_{maskch} {maskopr} {maskval}')
         else:
             mask = ~np.isnan(lons.data)
             print(f'no masking')
@@ -90,9 +95,16 @@ class read_ioda(object):
             sel_dict = {in_dict['dim']:in_dict['dimidx']}
             print(sel_dict)
             data = data_ds[self.varname].sel(sel_dict)
-            if masking: mask = mask.sel(sel_dict)
+            if maskch is None:
+                mask = mask.sel(sel_dict)
         else:
             data = data_ds[self.varname]
+
+        if 'hofx' in self.vargroup:
+            sza = meta_ds['solarZenithAngle'].data
+            sec_sza = np.where( sza < 82., 1. / np.cos(np.deg2rad(sza)) , np.nan)
+            for nc in range(data.sizes['Channel']):
+                data[:, nc] = data[:, nc] * sec_sza
         
         name = '%s %s' %(self.vargroup, self.varname)
         self.plotdict = {'name':name,
@@ -151,11 +163,13 @@ def plot_scatter(data_dict, outpng, conf):
 
     for n in data[plotdim].values:
         pltdata = data.sel({plotdim:[n]}).data[:,0]
-        if masking:
+        if masking and "Channel" in maskarr.dims:
             pltmask = maskarr.sel({plotdim:[n]}).data[:,0]
         else:
             pltmask = maskarr
-        print(pltmask)
+        plt_cnts = np.count_nonzero(pltmask)
+        print(f"Plotting {plt_cnts} out of {data.sizes['Location']}")
+        
         fig=plt.figure()
         ax=plt.subplot(projection=proj)
         set_size(axe_w, axe_h, l=axe_l, b=axe_b, r=axe_r, t=axe_t)
@@ -236,14 +250,15 @@ if __name__ == '__main__':
 
     if args.mask:
         in_dict['mask'] = {}
-        pattern = r'([a-zA-Z_][a-zA-Z0-9_]*)(==|!=|>=|<=|>|<)(\d+(\.\d+)?)'
+        pattern = r'([a-zA-Z][a-zA-Z0-9]*)_(\d*)\s*([<>=!]+)\s*([-+]?\d*\.?\d+(?:[eE][-+]?\d+)?)'
         match = re.match(pattern, args.mask)
         in_dict['mask']['group'] = match.group(1)
-        in_dict['mask']['operator'] = ops[match.group(2)]
+        in_dict['mask']['channel'] = int(match.group(2))
+        in_dict['mask']['operator'] = ops[match.group(3)]
         if 'QC' in in_dict['mask']['group']:
-            in_dict['mask']['value'] = int(match.group(3))
+            in_dict['mask']['value'] = int(match.group(4))
         else:
-            in_dict['mask']['value'] = float(match.group(3))
+            in_dict['mask']['value'] = float(match.group(4))
 
     print(in_dict)
 

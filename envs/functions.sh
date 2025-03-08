@@ -29,7 +29,7 @@ case $1 in
 'ds')
   salloc --partition=compute --qos=debug --account=s2127 --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
 's4')
-  salloc --partition=s4 --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+  salloc --partition=s4 --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=2:00:00 ;;
 'or')
   salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
 'dr')
