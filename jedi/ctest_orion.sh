@@ -29,14 +29,14 @@ DO_RERUN='N'
 #bundle_dir=/work2/noaa/jcsda/shihwei/git/newgeninttest/genint-bundle
 #builds_dir=/work2/noaa/jcsda/shihwei/git/newgeninttest/genint-bundle/build
 bundle_dir=${JEDI_ROOT}/jedi-bundle
-builds_dir=${JEDI_ROOT}/build
+builds_dir=${JEDI_ROOT}/build_secsza
 
 testname="quenchxx_test_genint_*"
 #testname="fv3jedi_test_tier1_forecast_fv3lm"
 
 cd $builds_dir
 [[ $DO_ECBUILD == 'Y' ]]&& ecbuild $bundle_dir
-[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 8
+[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 12
 if [ $DO_TEST == 'Y' ]; then
     if [ -z $testname ]; then
         if [ $DO_RERUN == 'Y' ]; then

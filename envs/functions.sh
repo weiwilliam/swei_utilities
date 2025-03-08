@@ -31,7 +31,7 @@ case $1 in
 's4')
   salloc --partition=s4 --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
 'or')
-  salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
+  salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
 'dr')
   qinteractive -V --ntasks 6 --mem 96GB -A $2 -q develop -l walltime=02:00:00 -l job_priority=economy @derecho ;;
 *) 

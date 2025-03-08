@@ -1,10 +1,11 @@
 #!/usr/bin/env python3
-import sys
+import sys, re
 import argparse
 from datetime import datetime
 import netCDF4 as nc
 import numpy as np
 import os
+from refdict import ops
 
 def isinside(lat_arr, lon_arr, poly_file):
     import numpy as np
@@ -33,15 +34,27 @@ def isinside(lat_arr, lon_arr, poly_file):
     return out_mask
 
 class cropioda(object):
-    def __init__(self, input, output, polygon):
+    def __init__(self, input, output, polygon, maskbydict):
         src = nc.Dataset(input, 'r')
         if src.dimensions['Location'].size == 0:
             raise Exception('no obs available')
 
         lat = src.groups['MetaData'].variables['latitude'][:].ravel()
         lon = src.groups['MetaData'].variables['longitude'][:].ravel()
-       
-        mask = isinside(lat, lon, polygon)
+      
+        if maskbydict:
+            mskgrp = maskbydict['group']
+            mskchl = maskbydict['channel'] - 1 
+            mskopr = maskbydict['operator']
+            mskval = maskbydict['value']
+            mskvarn = list(src.groups[mskgrp].variables.keys())[0]
+            mskvar = src.groups[mskgrp].variables[mskvarn]
+            mskchlindx = mskvar.dimensions.index('Channel')
+            indice = [slice(None)] * mskvar.ndim
+            indice[mskchlindx] = mskchl
+            mask = mskopr(mskvar[tuple(indice)], mskval)
+        else:
+            mask = isinside(lat, lon, polygon)
 
         if np.count_nonzero(mask) == 0:
             raise Exception('no obs available in the target area')
@@ -101,12 +114,31 @@ def main():
     parser.add_argument(
         '-p', '--polygon',
         help="masking polygon file",
-        type=str, required=True)
+        type=str, default=None)
+    parser.add_argument(
+        '-m', '--mask_by',
+        help="keep data meets the critera",
+        type=str, default=None)
 
     args = parser.parse_args()
 
+    if args.polygon is None and args.mask_by is None:
+        raise Exception('at least one masking method needed: polygon/mask_by')
+
+    maskdict = {}
+    if args.mask_by:
+        pattern = r"(\w+):(\d+)([<>=!]+)([-+]?[0-9]*\.?[0-9]+(?:[eE][-+]?[0-9]+)?)"
+        match = re.match(pattern, args.mask_by)
+        maskdict['group'] = match.group(1)
+        maskdict['channel'] = int(match.group(2))
+        maskdict['operator'] = ops[match.group(3)]
+        if 'QC' in maskdict['group']:
+            maskdict['value'] = int(match.group(4))
+        else:
+            maskdict['value'] = float(match.group(4))
+
     # Read in the AOD data
-    cropped = cropioda(args.input, args.output, args.polygon)
+    cropped = cropioda(args.input, args.output, args.polygon, maskdict)
 
 if __name__ == '__main__':
-    main()    
+    main()

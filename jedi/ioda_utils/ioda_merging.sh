@@ -14,10 +14,10 @@ export HDF5_USE_FILE_LOCKING=FALSE
 ulimit -s unlimited || true
 ulimit -v unlimited || true
 
-#filepath='/work2/noaa/jcsda/shihwei/jedi_exps/save_geoval/output/geovals'
-#filetmp='geovals.caboverde.viirs_j1_albedo-70thinned_2021082315_0*'
-filepath='/work2/noaa/jcsda/shihwei/jedi_exps/ufo_crtm/output/obsdiag'
-filetmp='jacs.caboverde.viirs_j1_albedo_l1b-70thinned.2021082315_0*'
+filepath='/work2/noaa/jcsda/shihwei/jedi_exps/save_geoval/output/geovals'
+filetmp='geovals.viirs_j1_albedo-small.2021082315_0*'
+#filepath='/work2/noaa/jcsda/shihwei/jedi_exps/ufo_crtm/output/obsdiag'
+#filetmp='jacs.caboverde.viirs_j1_albedo_l1b-70thinned.2021082315_0*'
 
 cd $filepath
 

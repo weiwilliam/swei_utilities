@@ -90,7 +90,7 @@ class read_ioda(object):
             sel_dict = {in_dict['dim']:in_dict['dimidx']}
             print(sel_dict)
             data = data_ds[self.varname].sel(sel_dict)
-            mask = mask.sel(sel_dict)
+            if masking: mask = mask.sel(sel_dict)
         else:
             data = data_ds[self.varname]
         
@@ -175,7 +175,7 @@ def plot_scatter(data_dict, outpng, conf):
                           fraction=cb_frac,pad=cb_pad,aspect=cb_asp,label=cb_lbl)
         cb.ax.ticklabel_format(axis='y', style='sci', scilimits=(0,0), useMathText=True)
        
-        filename = '%s_%s%.2i.png' % (outpng, plotdim, n)
+        filename = '%s.%s%.2i.png' % (outpng, plotdim, n)
         fig.savefig(filename, dpi=pdpi)
         plt.close()
 
