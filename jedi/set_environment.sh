@@ -2,6 +2,8 @@
 
 echo "JEDI_ROOT: $JEDI_ROOT"
 echo "JEDI_SRC: $JEDI_SRC"
+export R2D2_USER="weiwilliam1987"
+export R2D2_API_KEY="4a8b602d-034d-11f0-9b61-06d3b1fbe489"
 
 load_skylab () {
     machine=$1
@@ -25,12 +27,17 @@ load_skylab () {
 
 pipreinstall (){
     source $JEDI_ROOT/venv/bin/activate
-    repos="solo r2d2 ewok simobs skylab"
+    repos="r2d2-client ewok simobs skylab"
     for dir in $repos
     do
         if [ ! -d $JEDI_SRC/$dir ]; then
             cd $JEDI_SRC
             git clone https://github.com/jcsda-internal/$dir
+        else
+            cd $JEDI_SRC/$dir
+            git checkout develop
+            git fetch
+            git pull
         fi
         if [ $dir != 'skylab' ]; then
             cd $JEDI_SRC/$dir
