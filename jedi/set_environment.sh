@@ -27,20 +27,17 @@ load_skylab () {
 
 pipreinstall (){
     source $JEDI_ROOT/venv/bin/activate
+    workflow=${JEDI_WORKFLOW:-$JEDI_ROOT/jedi-workflow}
+    [[ ! -d $workflow ]]&&mkdir -p $workflow
     repos="r2d2-client ewok simobs skylab"
     for dir in $repos
     do
-        if [ ! -d $JEDI_SRC/$dir ]; then
-            cd $JEDI_SRC
+        if [ ! -d $workflow/$dir ]; then
+            cd $workflow
             git clone https://github.com/jcsda-internal/$dir
-        else
-            cd $JEDI_SRC/$dir
-            git checkout develop
-            git fetch
-            git pull
         fi
         if [ $dir != 'skylab' ]; then
-            cd $JEDI_SRC/$dir
+            cd $workflow/$dir
             python3 -m pip install -e .
         fi
     done
@@ -57,7 +54,7 @@ activate_skylab (){
 
 jumptolg (){
     login_no=$1
-    ssh -Y Orion-login-${login_no}
+    ssh -XY Orion-login-${login_no}
 }
 
 show_exps (){
