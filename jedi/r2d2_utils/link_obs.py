@@ -5,20 +5,23 @@ import pandas as pd
 from datetime import timedelta
 from utils import get_dates
 
-fetch = 1
-savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/modis_aqua_aod-full'
-sdate = '2024110106'
-edate = '2024110106'
+link = 1
+data_store = '/glade/campaign/mmm/parc/jedipara/r2d2-experiments-nwsc/observation'
+parent_savedir = '/glade/campaign/ncar/nmmm0072/Data/obs'
+sdate = '2024110112'
+edate = '2024113018'
 hint = 6
 half_win = timedelta(hours=hint)/2
 step = 'PT6H'
-#win_beg = (pd.to_datetime(date,format='%Y%m%d%H')-half_win).strftime('%Y-%m-%dT%H:00:00Z')
 obsname = 'modis_aqua_aod'
 provider = 'nasa' # 'nasa'
 file_extension = 'nc4'
 
+savedir = f'{parent_savedir}/{obsname}'
 if not os.path.exists(savedir):
     os.mkdir(savedir)
+    os.chmod(savedir, 0o775)
+    print(f'Create {savedir} and change it to permission 775')
 
 print(f'Search {obsname} for cycle {sdate} to {edate} every {hint} hours from Provider: {provider}')
 
@@ -46,20 +49,18 @@ for date in dates:
                   window_length=conf['window_length'],
               )
     total_conf += [conf]
-print(result)
 
-for item, cyc_conf in zip(result, total_conf):
-    print(f"Fetch {item} to {cyc_conf['obsfile']}")
-    if not fetch:
-        continue
 
-    r2d2.fetch(
-        provider=item['provider'],
-        item='observation',
-        observation_type=item['observation_type'],
-        window_start=item['window_start'],
-        window_length=item['window_length'],
-        target_file=cyc_conf['obsfile'],
-        file_extension=item['file_extension'],
-    )
-
+if link:
+    for item, cyc_conf in zip(result, total_conf):
+        print(f"Link {item} to {cyc_conf['obsfile']}")
+    
+        tmp_index = item['observation_index']
+        tmp_winbeg = item['window_start']
+        tmp_format = item['file_extension']
+        source_file = f'{data_store}/{tmp_winbeg}/{tmp_index}.{tmp_format}'
+    
+        if os.path.exists(source_file):
+            os.symlink(source_file, cyc_conf['obsfile'])
+        else:
+            print(f'No such file: {source_file}')

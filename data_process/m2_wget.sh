@@ -1,17 +1,25 @@
-#!/bin/ksh -x 
-module purge
-module load miniconda/3.8-s4
-
-ndate="python $HOME/bin/ndate.py"
+#!/usr/bin/env bash
 
 M2_srclink='https://goldsmr5.gesdisc.eosdis.nasa.gov/data/MERRA2'
 file_cat='M2I3NVAER.5.12.4'
 file_tag='inst3_3d_aer_Nv'
 
-desdir=/data/users/swei/common/MERRA2
+desdir=/glade/derecho/scratch/swei/Dataset/input/bkg/MERRA-2
 
-sdate=2020081300
-edate=2020082000
+sdate=2024110100
+edate=2024110100
+
+func_ndate (){
+    hrinc=$1
+    syear=${2:0:4}
+    smon=${2:4:2}
+    sday=${2:6:2}
+    shr=${2:8:2}
+
+    datein=`date -u --date="$smon/$sday/$syear $shr:00:00"`
+    dateout=`date +%Y%m%d%H -u -d "$datein $hrinc hours"`
+    echo $dateout
+}
 
 cdate=$sdate
 while [ $cdate -le $edate ];
@@ -29,5 +37,5 @@ do
 
   wget --load-cookies ~/.urs_cookies --save-cookies ~/.urs_cookies --auth-no-challenge=on --keep-session-cookies --content-disposition $filelink
 
-  cdate=`$ndate 24 $cdate`
+  cdate=`func_ndate 24 $cdate`
 done

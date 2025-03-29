@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #PBS -N jedi_ctest
-##PBS -A NMMM0072
-#PBS -A UALB0028
+#PBS -A NMMM0072
+##PBS -A UALB0028
 #PBS -q develop
 #PBS -l job_priority=economy
 #PBS -l select=1:ncpus=12:mem=128GB
