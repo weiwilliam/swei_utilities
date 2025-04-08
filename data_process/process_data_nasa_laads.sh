@@ -6,7 +6,7 @@ start_date=2020061812
   end_date=2020061812
 window_len=6
 
-outpath='/glade/work/swei/data/RawOBS/VIIRS_L1b'
+outpath='/data/users/swei/Dataset/VIIRS_J1'
 year=2020
 jday=170
 datastream='5201'
@@ -24,5 +24,5 @@ echo $cycfiles
 
 for file in $cycfiles
 do
-    wget -nc --auth-no-challenge --no-check-certificate ${src_url}/${file}
+    wget -nc --auth-no-challenge --no-check-certificate ${src_url}/${file} -O ${des_path}/${file}
 done 
