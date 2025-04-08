@@ -6,6 +6,7 @@ from datetime import timedelta
 from utils import get_dates
 
 fetch = 1
+verbose = 0
 savedir = '/glade/derecho/scratch/swei/Dataset/input/obs/modis_aqua_aod-full'
 sdate = '2024110106'
 edate = '2024110106'
@@ -24,7 +25,7 @@ print(f'Search {obsname} for cycle {sdate} to {edate} every {hint} hours from Pr
 
 dates = get_dates(sdate, edate, hint)
 
-result = []
+results = []
 total_conf = []
 for date in dates:
     win_beg = (date - half_win).strftime('%Y%m%dT%H%M%SZ')
@@ -38,17 +39,19 @@ for date in dates:
             'file_extension':file_extension,
             }
     
-    result += r2d2.search(
-                  provider=provider,
-                  item='observation',
-                  observation_type=conf['obsname'],
-                  window_start=conf['window_begin'],
-                  window_length=conf['window_length'],
-              )
-    total_conf += [conf]
-print(result)
+    result = r2d2.search(
+                 provider=provider,
+                 item='observation',
+                 observation_type=conf['obsname'],
+                 window_start=conf['window_begin'],
+                 window_length=conf['window_length'],
+             )
+    if result:
+        results += result
+        total_conf += [conf]
+if verbose: print(results)
 
-for item, cyc_conf in zip(result, total_conf):
+for item, cyc_conf in zip(results, total_conf):
     print(f"Fetch {item} to {cyc_conf['obsfile']}")
     if not fetch:
         continue

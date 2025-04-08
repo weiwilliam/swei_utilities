@@ -6,14 +6,15 @@ from datetime import timedelta
 from utils import get_dates
 
 link = 1
+verbose = 0
 data_store = '/glade/campaign/mmm/parc/jedipara/r2d2-experiments-nwsc/observation'
 parent_savedir = '/glade/campaign/ncar/nmmm0072/Data/obs'
-sdate = '2024110112'
+sdate = '2024110100'
 edate = '2024113018'
 hint = 6
 half_win = timedelta(hours=hint)/2
 step = 'PT6H'
-obsname = 'modis_aqua_aod'
+obsname = 'modis_terra_aod'
 provider = 'nasa' # 'nasa'
 file_extension = 'nc4'
 
@@ -27,7 +28,7 @@ print(f'Search {obsname} for cycle {sdate} to {edate} every {hint} hours from Pr
 
 dates = get_dates(sdate, edate, hint)
 
-result = []
+results = []
 total_conf = []
 for date in dates:
     win_beg = (date - half_win).strftime('%Y%m%dT%H%M%SZ')
@@ -41,18 +42,20 @@ for date in dates:
             'file_extension':file_extension,
             }
     
-    result += r2d2.search(
-                  provider=provider,
-                  item='observation',
-                  observation_type=conf['obsname'],
-                  window_start=conf['window_begin'],
-                  window_length=conf['window_length'],
-              )
-    total_conf += [conf]
-
+    result = r2d2.search(
+                 provider=provider,
+                 item='observation',
+                 observation_type=conf['obsname'],
+                 window_start=conf['window_begin'],
+                 window_length=conf['window_length'],
+             )
+    if result: 
+        results += result
+        total_conf += [conf]
+if verbose: print(results)
 
 if link:
-    for item, cyc_conf in zip(result, total_conf):
+    for item, cyc_conf in zip(results, total_conf):
         print(f"Link {item} to {cyc_conf['obsfile']}")
     
         tmp_index = item['observation_index']
