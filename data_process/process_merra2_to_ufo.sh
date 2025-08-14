@@ -1,4 +1,11 @@
-#!/usr/bin/env bash
+#!/bin/bash -l
+#PBS -N process_m2 
+#PBS -A UALB0028
+#PBS -l select=1:ncpus=4:mem=128GB
+#PBS -l walltime=12:00:00
+#PBS -q casper
+#PBS -j oe
+#PBS -V
 
 M2_srclink='https://goldsmr5.gesdisc.eosdis.nasa.gov/data/MERRA2'
 met_file_cat='M2I3NVASM.5.12.4'
@@ -8,11 +15,11 @@ aer_file_tag='inst3_3d_aer_Nv'
 extract_timedim_list="0 2 4 6"
 
 wrktmp=/glade/derecho/scratch/swei/tmp_process_m2
-desdir=/glade/campaign/ncar/nmmm0072/Data/MERRA-2
-#desdir=/glade/derecho/scratch/swei/Dataset/input/bkg/MERRA-2
+#desdir=/glade/campaign/ncar/nmmm0072/Data/MERRA-2
+desdir=/glade/derecho/scratch/swei/Dataset/input/bkg/MERRA-2
 
-sdate=2024110100
-edate=2024110100
+sdate=2019072200
+edate=2019072300
 
 func_ndate (){
     hrinc=$1
@@ -63,6 +70,7 @@ do
     done
     echo "Appending variables to aer_file.${pdy}${hh}.nc4"
     ncks -A -v PL,QV,T met_file.${pdy}${hh}.nc4 aer_file.${pdy}${hh}.nc4
+
     rc=$?
     [[ $rc -eq 0 ]] && mv aer_file.${pdy}${hh}.nc4 $desdir/$y4/$m2/MERRA2_400.ufo.${pdy}${hh}.nc4
   done

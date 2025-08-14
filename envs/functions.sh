@@ -10,12 +10,14 @@ alias slurmdel='scancel'
 alias pbslist='qstat -w -u $USER'
 alias pbsdel='qdel'
 alias rda='cd /glade/campaign/collections/rda/data'
+alias gocr='ssh cron.hpc.ucar.edu'
 
 # Other alias
 alias ftpds='sftp swei@data-access.ucar.edu:/glade/work/swei'
 alias ftpor='sftp shihwei@Orion-dtn.hpc.msstate.edu:/work2/noaa/jcsda/shihwei'
 alias psu='ps -ef | grep ^${USER}'
 alias killstop='kill -9 `jobs -ps`'
+alias ls='ls --color'
 alias la='ls -a'
 alias lt='ls -lrt'
 
@@ -25,6 +27,10 @@ alias lt='ls -lrt'
 echo "alloc_a_node is available for following platforms:"
 echo "ds, s4, or, dr"
 alloc_a_node(){
+export HDF5_USE_FILE_LOCKING=FALSE
+export OOPS_TRACE=1
+export OOPS_DEBUG=1
+export VALIDATE_PARAMETERS=1
 case $1 in
 'ds')
   salloc --partition=compute --qos=debug --account=s2127 --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=1:00:00 ;;
@@ -33,11 +39,8 @@ case $1 in
 'or')
   salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
 'dr')
-  qinteractive -V --ntasks 6 --mem 96GB -A $2 -q develop -l walltime=02:00:00 -l job_priority=economy @derecho ;;
+  qinteractive -V --ntasks $3 --mem ${4}GB -A $2 -q develop -l walltime=02:00:00 -l job_priority=economy @derecho ;;
 *) 
   echo "Not supported platform";;
 esac
-export HDF5_USE_FILE_LOCKING=FALSE
-export OOPS_TRACE=1
-export OOPS_DEBUG=1
 }

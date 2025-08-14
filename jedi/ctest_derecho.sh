@@ -6,7 +6,8 @@
 #PBS -l job_priority=economy
 #PBS -l select=1:ncpus=12:mem=128GB
 #PBS -l walltime=02:00:00
-#PBS -j oe
+#PBS -o ./jedi_ctest_log.out
+#PBS -e ./jedi_ctest_log.err
 
 set -x
 
@@ -14,10 +15,10 @@ DO_ECBUILD='N'
 DO_MAKE='Y'
 DO_TEST='N' # run "ctest -R get_" before do whole ctest
 DO_RERUN='N'
-#bundle_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle
-#builds_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle/build.intel.18
-bundle_dir=/glade/work/swei/skylab/
-builds_dir=/glade/work/swei/skylab/build
+bundle_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle
+builds_dir=/glade/work/swei/Git/JEDI-METplus/genint-bundle/build2
+#bundle_dir=/glade/work/swei/skylab/jedi-bundle
+#builds_dir=/glade/work/swei/skylab/build2
 
 testname="genint_*"
 
@@ -27,7 +28,7 @@ export HDF5_USE_FILE_LOCKING=FALSE
 
 cd $builds_dir
 [[ $DO_ECBUILD == 'Y' ]]&& ecbuild $bundle_dir
-[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 12 > make.log 2>&1
+[[ $DO_MAKE == 'Y' ]]&& make VERBOSE=1 -j 12
 if [ $DO_TEST == 'Y' ]; then
     if [ -z $testname ]; then
         if [ $DO_RERUN == 'Y' ]; then

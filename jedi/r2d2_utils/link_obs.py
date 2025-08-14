@@ -8,22 +8,18 @@ from utils import get_dates
 link = 1
 verbose = 0
 data_store = '/glade/campaign/mmm/parc/jedipara/r2d2-experiments-nwsc/observation'
-parent_savedir = '/glade/campaign/ncar/nmmm0072/Data/obs'
-sdate = '2024110100'
-edate = '2024113018'
-hint = 6
+parent_savedir = '/glade/derecho/scratch/swei/Dataset/input/obs'
+#parent_savedir = '/glade/campaign/ncar/nmmm0072/Data/obs'
+sdate = '2024082200'
+edate = '2024090100'
+hint = 1
 half_win = timedelta(hours=hint)/2
-step = 'PT6H'
-obsname = 'modis_terra_aod'
-provider = 'nasa' # 'nasa'
+step = 'PT1H'
+obsname = 'airnow'
+provider = 'epa'  # epa, nasa, noaa, esa
 file_extension = 'nc4'
 
 savedir = f'{parent_savedir}/{obsname}'
-if not os.path.exists(savedir):
-    os.mkdir(savedir)
-    os.chmod(savedir, 0o775)
-    print(f'Create {savedir} and change it to permission 775')
-
 print(f'Search {obsname} for cycle {sdate} to {edate} every {hint} hours from Provider: {provider}')
 
 dates = get_dates(sdate, edate, hint)
@@ -55,6 +51,11 @@ for date in dates:
 if verbose: print(results)
 
 if link:
+    if not os.path.exists(savedir):
+        os.mkdir(savedir)
+        os.chmod(savedir, 0o775)
+        print(f'Create {savedir} and change it to permission 775')
+
     for item, cyc_conf in zip(results, total_conf):
         print(f"Link {item} to {cyc_conf['obsfile']}")
     
