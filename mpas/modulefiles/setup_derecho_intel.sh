@@ -2,13 +2,13 @@
 module --force purge
 module load ncarenv/24.12
 module load craype
-module load gcc
+module load intel
 module load ncarcompilers
 module load cray-mpich
 module load parallel-netcdf # /1.12.3
 module load netcdf  # /4.9.2
-#module load conda
-#conda activate npl
+module load conda
+
 #export PYTHONPATH=/glade/campaign/mmm/wmr/mpas_tutorial/python_scripts
 #module load ncview
 #MPAS_Gits=/glade/work/swei/Git/MPAS
