@@ -1,0 +1,35 @@
+# Env control
+ulimit -S -s unlimited
+
+# Functions and Aliases
+echo "go cmd has options now:"
+echo "dr, ca, kr_cr, kr_h7, kr_hd, s4, or, ds"
+go() {
+  platform=$1
+  sshcmd=`which ssh`
+  case $platform in
+  'dr')
+     $sshcmd -XY swei@derecho.hpc.ucar.edu ;;
+  'ca')
+     $sshcmd -XY swei@casper.hpc.ucar.edu ;;
+  'kr_cr')
+     $sshcmd -XY sw651133@cron.arcc.albany.edu ;;
+  'kr_h7')
+     $sshcmd -XY sw651133@headnode7.rit.albany.edu ;;
+  'kr_hd')
+     $sshcmd -XY sw651133@head.arcc.albany.edu ;;
+  's4')
+     $sshcmd -XY swei@s4-gateway.ssec.wisc.edu ;;
+  'or')
+     $sshcmd -XY shihwei@orion-login.hpc.msstate.edu ;;
+  'ds')
+     $sshcmd -XY swei1@login.nccs.nasa.gov ;;
+  #'aws'
+  #   $sshcmd
+  esac
+}
+
+alias ftpordn='sftp shihwei@Orion-dtn.hpc.msstate.edu:/work2/noaa/jcsda/shihwei'
+alias ftpds='sftp swei@data-access.ucar.edu:/glade/work/swei'
+alias ftps4='sftp swei@s4-bastion.ssec.wisc.edu:/data/users/swei/FTPdir'
+alias ls='ls --color=always'
