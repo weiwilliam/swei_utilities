@@ -2,7 +2,7 @@
 #SBATCH --job-name=swei_runpy
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
-#SBATCH --time=1:30:00
+#SBATCH --time=8:00:00
 #SBATCH --account=da-cpu
 #SBATCH --partition=orion
 #SBATCH --qos=batch
@@ -17,11 +17,13 @@ set -x
 export SLURM_EXPORT_ENV=ALL
 export HDF5_USE_FILE_LOCKING='FALSE'
 
-bundledir=/work2/noaa/jcsda/shihwei/skylab/jedi-bundle
-running_under=/work2/noaa/jcsda/shihwei/data/viirs_j1_l1b
-pyscript="${bundledir}/iodaconv/src/compo/viirs_l1bnc2ioda.py -i VJ102MOD/2021/235/VJ102MOD.A2021235.1[5-9]* VJ102MOD/2021/235/VJ102MOD.A2021235.2[0-1]* -g VJ103MOD/2021/235/VJ103MOD.A2021235.1[5-9]* VJ103MOD/2021/235/VJ103MOD.A2021235.2[0-1]* -n 0.99 -o /work2/noaa/jcsda/shihwei/data/jedi-data/input/obs/viirs_j1_albedo-thinned_p99/obs.PT6H.viirs_j1_albedo-thinned_p99.2021082318.nc4 --secterm"
+#bundledir=/work2/noaa/jcsda/shihwei/skylab/jedi-bundle
+#running_under=/work2/noaa/jcsda/shihwei/data/viirs_j1_l1b
+#cd $running_under
+# pyscript="${bundledir}/iodaconv/src/compo/viirs_l1bnc2ioda.py -i VJ102MOD/2021/235/VJ102MOD.A2021235.1[5-9]* VJ102MOD/2021/235/VJ102MOD.A2021235.2[0-1]* -g VJ103MOD/2021/235/VJ103MOD.A2021235.1[5-9]* VJ103MOD/2021/235/VJ103MOD.A2021235.2[0-1]* -n 0.99 -o /work2/noaa/jcsda/shihwei/data/jedi-data/input/obs/viirs_j1_albedo-thinned_p99/obs.PT6H.viirs_j1_albedo-thinned_p99.2021082318.nc4 --secterm"
 
-cd $running_under
+pyscript="/home/shihwei/Git/research/pyscripts/MAPP/openaq2ioda.py"
+
 
 echo "$(date) Running: $pyscript"
   python $pyscript
