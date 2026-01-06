@@ -1,0 +1,25 @@
+#!/usr/bin/env bash
+#PBS -N extend_denoised
+#PBS -A nmmm0063
+#PBS -q main
+#PBS -l job_priority=premium
+##PBS -l select=32:ncpus=128:mpiprocs=128
+##PBS -l walltime=3:00:00
+#PBS -l select=1:mpiprocs=128:ncpus=128:mem=235GB
+#PBS -l walltime=00:15:00
+#PBS -j oe
+#PBS -J 0-60
+#PBS -V
+
+export HDF5_USE_FILE_LOCKING=FALSE
+ulimit -s unlimited || true
+ulimit -v unlimited || true
+topdir="/glade/derecho/scratch/swei/hydrosat_tmp/MPAS-DART/extended_forecast"
+expname="denoised15km"
+memid=${PBS_ARRAY_INDEX}
+#memid=0
+
+rundir=$topdir/$expname/member${memid}
+cd $rundir
+
+/opt/cray/pe/pals/1.2.12/bin/mpiexec $rundir/atmosphere_model

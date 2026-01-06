@@ -7,6 +7,7 @@ module load ncarcompilers
 module load cray-mpich
 module load parallel-netcdf # /1.12.3
 module load netcdf  # /4.9.2
+module load nco
 module load conda
 
 #export PYTHONPATH=/glade/campaign/mmm/wmr/mpas_tutorial/python_scripts

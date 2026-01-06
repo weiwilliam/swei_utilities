@@ -2,7 +2,6 @@
 #PBS -N process_paceaod
 #PBS -A NMMM0072
 #PBS -q develop
-#PBS -l job_priority=economy
 #PBS -l select=1:ncpus=1:mem=64Gb
 #PBS -l walltime=06:00:00
 #PBS -j oe
@@ -16,31 +15,62 @@ fi
 #set -x
 
 sensor='oci'
-start_cycle=2024110106
-  end_cycle=2024110106
+retrieval='uaa'
+start_cycle=2024101500
+  end_cycle=2024101918
 cyc_int=6
 window=6
-conv2ioda=0
-keep_raw=0
-ioda_outpath=/glade/campaign/ncar/nmmm0072/Data/obs/spexone_pace_aod
-jedibuild=/glade/work/swei/skylab/build2/bin
+conv2ioda=1
+keep_raw=1
+ioda_outpath=/glade/campaign/ncar/nmmm0072/Data/obs/ociuaa_pace_aod
+jedibuild=/glade/work/swei/skylab/build_oneapi/bin
 iodaconv=pace_aod2ioda.py
-wrkdir=/glade/derecho/scratch/swei/data_process_tmp/pace_ociuaa_1825
-rawdir=/glade/derecho/scratch/swei/Dataset/rawobs
+wrkdir=/glade/derecho/scratch/swei/data_process_tmp/pace_ociuaa_aod
+rawdir=/glade/derecho/scratch/swei/Dataset/rawobs/ociuaa_pace_aod
 getfile_url="https://oceandata.sci.gsfc.nasa.gov/getfile"
 
 case $sensor in
 'oci')
-    # OCI UAA
-    # senid=42; dtid_list="1826"; retrieval='uaa'  # older
-    senid=42; dtid_list="1825"; retrieval='uaa'  # new
-    ;;
+    # OCI UAA, senid=42
+    # OCI UAA Refined v3.1, dtid=1823
+    # OCI UAA NRT v3.1, dtid=1825
+    case $retrieval in
+    'uaa')
+        senid=42; dtid_list="1823" ;;
+    *)
+        echo "Unknown retrieval for OCI, available list: uaa"
+        exit 1 ;;
+    esac
+;;
 'spexone')
-    # SPEXone RemoTAP (NRT Ocean: 1350, Land: 1351)
-    #                 (Refined Ocean: 1420, Land: 1421)
-    senid=41; dtid_list="1350 1351"; retrieval='remotap' ;;
+    case $retrieval in
+    'remotap')
+        # SPEXone RemoTAP (NRT Ocean: 1350, Land: 1351)
+        #                 (Refined Ocean: 1420, Land: 1421)
+        senid=41; dtid_list="1420 1421" ;;
+    'fmapol')
+        # SPEXone FastMAPOL refined v3.0 (Ocean only)
+        senid=41; dtid_list="1971" ;;
+    *)
+        echo "Unknown retrieval for SPEXone, available list: remotap, fmapol"
+        exit 1 ;;
+    esac
+;;
+'harp2')
+    case $retrieval in
+    'fmapol')
+        # HARP2 FastMAPOL refined v3.0 (Ocean only)
+        senid=48; dtid_list="1547" ;;
+    *)
+        echo "Unknown retrieval for HARP2, available list: fmapol"
+        exit 1 ;;
+    esac
+;;
 esac
 
+if [ ! -d $ioda_outpath ]; then
+    mkdir -p $ioda_outpath
+fi
 if [ ! -d $wrkdir ]; then
     mkdir -p $wrkdir
 fi
@@ -62,6 +92,7 @@ until [ $current_cycle -gt $end_cycle ]; do
     winbeg=`date +"%Y%m%d%H" -u -d "$sdate"`
     winend=`date +"%Y%m%d%H" -u -d "$edate"`
     echo $sdate $edate
+    file_list=""
     for dtid in $dtid_list
     do 
         api_args="results_as_file=1&sensor_id=${senid}&dtid=${dtid}&sdate=${sdate}&edate=${edate}&subType=1"
