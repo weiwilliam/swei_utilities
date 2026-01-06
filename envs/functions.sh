@@ -25,7 +25,7 @@ alias lt='ls -lrt'
 # slurm allocate
 #
 echo "alloc_a_node is available for following platforms:"
-echo "ds, s4, or, dr"
+echo "ds, s4, or, dr, hl"
 alloc_a_node(){
 export HDF5_USE_FILE_LOCKING=FALSE
 export OOPS_TRACE=1
@@ -37,7 +37,9 @@ case $1 in
 's4')
   salloc --partition=s4 --account=star --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=2:00:00 ;;
 'or')
-  salloc --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
+  salloc --export=ALL --partition=orion --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
+'hl')
+  salloc --export=ALL --partition=hercules --qos=debug --account=da-cpu --job-name=interactive --nodes=1 --ntasks-per-node=24 --time=0:30:00 ;;
 'dr')
   qinteractive -V --ntasks $3 --mem ${4}GB -A $2 -q develop -l walltime=04:00:00 -l job_priority=economy @derecho ;;
 *) 
